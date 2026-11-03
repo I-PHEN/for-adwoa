@@ -158,12 +158,12 @@ html, body {
 .scene [data-m], .scene [data-split] .ch { opacity: 0; }
 
 .scene.entering [data-m] {
-  animation: var(--anim, riseIn) 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 0.22s + 0.15s);
+  animation: var(--anim, riseIn) 1.0s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 0.12s + 0.1s);
 }
 .scene.entering [data-split] .ch {
-  animation: chIn 0.9s cubic-bezier(0.2, 1.3, 0.4, 1) both;
-  animation-delay: calc(var(--i, 0) * 0.22s + 0.15s + var(--ci, 0) * 0.035s);
+  animation: chIn 0.8s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  animation-delay: calc(var(--i, 0) * 0.12s + 0.1s + var(--ci, 0) * 0.025s);
 }
 .scene.entered [data-m] { opacity: 1; animation: none; }
 .scene.entered [data-split] .ch {
@@ -174,8 +174,8 @@ html, body {
 
 /* Leaving: Camera Rushes Forward Past Scene */
 .scene.leaving [data-m], .scene.leaving [data-split] {
-  animation: flyPast 0.9s cubic-bezier(0.55, 0, 0.75, 0.2) both;
-  animation-delay: calc(var(--i, 0) * 0.05s);
+  animation: flyPast 0.65s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 0.03s);
 }
 
 .word { display: inline-block; white-space: nowrap; }
@@ -851,19 +851,26 @@ html, body {
    ======================================================== */
 .candle-wrapper {
   position: relative;
-  height: 13rem;
+  height: 12.5rem;
+  max-height: 13rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  transition: height 0.7s cubic-bezier(0.16, 1, 0.3, 1), margin 0.7s ease;
-  margin-bottom: 0.5rem;
+  transition: opacity 0.75s ease, max-height 0.75s cubic-bezier(0.16, 1, 0.3, 1), height 0.75s cubic-bezier(0.16, 1, 0.3, 1), margin 0.75s ease, transform 0.75s ease;
+  margin-bottom: 0.8rem;
 }
 
 .candle-wrapper.shrunk {
-  height: 4.2rem;
-  margin-bottom: 0.2rem;
+  opacity: 0;
+  max-height: 0;
+  height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  transform: scale(0.85) translateY(-10px);
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .candle {
@@ -1024,7 +1031,8 @@ html, body {
 }
 
 .reveal-in {
-  animation: lineFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: lineFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
 }
 
 .finale-bar {
@@ -1449,7 +1457,7 @@ html, body {
         <h1 class="note-title" id="noteTitle" data-split>Happy Birthday, Adwoa! 🎂🎉</h1>
         <p class="note-line" id="line1">You’re someone who actually remembers. Days after I mentioned my week of touching grass, you asked how it went.</p>
         <p class="note-line" id="line2">And whenever I tell you I’m going through something, like when I’m sick, the care and emotional vibes you give say so much about how deeply you care about others.</p>
-        <p class="note-line" id="line3">Having a thoughtful friend who pays attention to the little things like that means a lot. Thank you. I hope this year is extra good to you!</p>
+        <p class="note-line" id="line3">Having a thoughtful friend who pays attention to the little things like that means a lot. Thank you. I hope this new chapter is extra good to you!</p>
         <p class="note-sign" id="noteSign">— Your friend, Michael</p>
 
         <div class="finale-bar" id="finaleBar">
@@ -2037,9 +2045,11 @@ html, body {
 
     var startTime = performance.now();
     function animateFlight(now) {
-      var progress = (now - startTime) / flightDuration;
+      var progress = Math.min(1, (now - startTime) / flightDuration);
 
-      var curPct = startPct + (endPct - startPct) * Math.min(1, progress);
+      // Silky smooth cubic easing for tracker rocket
+      var easeP = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      var curPct = startPct + (endPct - startPct) * easeP;
       jtFill.style.width = curPct.toFixed(1) + '%';
       jtRocket.style.left = curPct.toFixed(1) + '%';
 
@@ -2047,13 +2057,10 @@ html, body {
         activePlanet.progress = progress;
       }
 
-      if (progress < 0.25) {
-        warpFactor = 1.0 + (progress / 0.25) * 2.2;
-      } else if (progress < 0.78) {
-        warpFactor = 3.2;
-      } else if (progress < 1.0) {
-        warpFactor = 3.2 - ((progress - 0.78) / 0.22) * 2.2;
-      } else {
+      // Continuous, fluid acceleration/deceleration curve (zero sudden jumps)
+      warpFactor = 1.0 + Math.sin(progress * Math.PI) * 2.2;
+
+      if (progress >= 1) {
         warpFactor = 1.0;
         isWarping = false;
         activePlanet = null;
@@ -2418,8 +2425,8 @@ html, body {
   var rxCur = 0, ryCur = 0;
   var rxTgt = 0, ryTgt = 0;
   var rxVel = 0, ryVel = 0;
-  var springK = 0.16;
-  var springDamp = 0.74;
+  var springK = 0.13;
+  var springDamp = 0.78;
 
   function updateRunawaySpring() {
     var fx = (rxTgt - rxCur) * springK;
@@ -2430,7 +2437,7 @@ html, body {
     ryVel = (ryVel + fy) * springDamp;
     ryCur += ryVel;
 
-    runawayBtn.style.transform = 'translate(' + rxCur.toFixed(1) + 'px, ' + ryCur.toFixed(1) + 'px)';
+    runawayBtn.style.transform = 'translate3d(' + rxCur.toFixed(2) + 'px, ' + ryCur.toFixed(2) + 'px, 0)';
   }
 
   var lastTime = performance.now();
@@ -2576,7 +2583,9 @@ html, body {
     haptic([60, 40, 80]);
 
     document.body.classList.add('out');
-    candleStage.classList.add('shrunk');
+    setTimeout(function() {
+      candleStage.classList.add('shrunk');
+    }, 500);
 
     setTimeout(function() { lanternsActive = true; }, 700);
     setTimeout(function() { stardustActive = true; }, 2200);
