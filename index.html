@@ -332,10 +332,10 @@ html, body {
 .orbit.o2 { inset: -10px; border-color: rgba(255, 207, 86, 0.12); animation: orbitB 9s linear infinite; }
 .orbit.o2 span { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
 
-/* Snugbeats Beat-Reactive Pulses */
-.beat .reels-core { animation: beatCore 0.45s ease-out; }
-.beat .cassette-box { animation: cardBeat 0.6s ease-out; }
-.beat .sound-bars-live { animation: barsBeat 0.45s ease-out; }
+/* Snugbeats Beat-Reactive Pulses (Scoped to Cassette Only) */
+.cassette-box.beat { transform: scale(1.015); transition: transform 0.2s ease-out; }
+.cassette-box.beat .reels-core { animation: beatCore 0.45s ease-out; }
+.cassette-box.beat .sound-bars-live { animation: barsBeat 0.45s ease-out; }
 
 /* Camera Shake when Warp Engages */
 .shake { animation: shake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
@@ -441,7 +441,7 @@ html, body {
   width: 0%;
   background: linear-gradient(90deg, var(--pink), var(--gold));
   box-shadow: 0 0 10px var(--pink-glow);
-  transition: width 0.3s ease;
+  will-change: width;
 }
 .jt-stop {
   position: absolute;
@@ -488,7 +488,7 @@ html, body {
   transform: translate(-50%, -50%) rotate(45deg);
   filter: drop-shadow(0 0 8px rgba(255, 150, 60, 0.85));
   z-index: 2;
-  transition: left 0.3s ease;
+  will-change: left;
 }
 
 /* Transition 1: Words Zooming Past */
@@ -515,10 +515,10 @@ html, body {
 .w4 { --x: 64%; --y: 38%; text-shadow: 0 0 25px rgba(175, 120, 255, 0.8); }
 
 .flight-overlay.t1 .whisper-cluster { display: block; }
-.flight-overlay.t1 .w1 { animation: zoomPast 3.8s cubic-bezier(0.33, 0, 0.2, 1) 0.5s forwards; }
-.flight-overlay.t1 .w2 { animation: zoomPast 3.8s cubic-bezier(0.33, 0, 0.2, 1) 2.2s forwards; }
-.flight-overlay.t1 .w3 { animation: zoomPast 3.8s cubic-bezier(0.33, 0, 0.2, 1) 3.9s forwards; }
-.flight-overlay.t1 .w4 { animation: zoomPast 3.8s cubic-bezier(0.33, 0, 0.2, 1) 5.6s forwards; }
+.flight-overlay.t1 .w1 { animation: zoomPast 2.0s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+.flight-overlay.t1 .w2 { animation: zoomPast 2.0s cubic-bezier(0.2, 0.8, 0.2, 1) 1.2s forwards; }
+.flight-overlay.t1 .w3 { animation: zoomPast 2.0s cubic-bezier(0.2, 0.8, 0.2, 1) 2.2s forwards; }
+.flight-overlay.t1 .w4 { animation: zoomPast 2.0s cubic-bezier(0.2, 0.8, 0.2, 1) 3.2s forwards; }
 
 /* Transition 2: Thought Bubbles */
 .thought-cluster {
@@ -537,7 +537,7 @@ html, body {
 }
 .flight-overlay.t2 .thought-cluster { display: block; }
 .flight-overlay.t2 .think-face {
-  animation: faceIn 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards, faceTilt 2.6s ease-in-out 1.8s infinite;
+  animation: faceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards, faceTilt 2.4s ease-in-out 1.0s infinite;
 }
 .thought-bubble {
   position: absolute;
@@ -567,9 +567,9 @@ html, body {
 .thought-bubble .tl-a { width: 11px; height: 11px; left: 24px; bottom: -15px; }
 .thought-bubble .tl-b { width: 6px; height: 6px; left: 15px; bottom: -24px; }
 
-.flight-overlay.t2 .tb1 { animation: bubblePop 8s ease-out 1.0s forwards, bubbleBob 3s ease-in-out 1.0s infinite; }
-.flight-overlay.t2 .tb2 { animation: bubblePop 6s ease-out 3.0s forwards, bubbleBob 3.4s ease-in-out 3.0s infinite; }
-.flight-overlay.t2 .tb3 { animation: bubblePop 4s ease-out 5.0s forwards, bubbleBob 2.8s ease-in-out 5.0s infinite; }
+.flight-overlay.t2 .tb1 { animation: bubblePop 4.2s ease-out 0.3s forwards, bubbleBob 2.8s ease-in-out 0.3s infinite; }
+.flight-overlay.t2 .tb2 { animation: bubblePop 3.4s ease-out 1.3s forwards, bubbleBob 2.8s ease-in-out 1.3s infinite; }
+.flight-overlay.t2 .tb3 { animation: bubblePop 2.6s ease-out 2.3s forwards, bubbleBob 2.8s ease-in-out 2.3s infinite; }
 
 /* Transitions 3 & 4: Radar Scan */
 .radar-cluster {
@@ -1557,10 +1557,13 @@ html, body {
   }
 
   function triggerBeatPulse() {
-    document.body.classList.add('beat');
-    setTimeout(function() {
-      document.body.classList.remove('beat');
-    }, 400);
+    var cassette = document.querySelector('.cassette-box');
+    if (cassette && cassette.offsetParent !== null) {
+      cassette.classList.add('beat');
+      setTimeout(function() {
+        cassette.classList.remove('beat');
+      }, 400);
+    }
   }
 
   function playRhodesNote(freq, startTime, duration, velocity) {
@@ -2007,14 +2010,14 @@ html, body {
       return;
     }
 
-    var flightDuration = 9600;
+    var flightDuration = 5200;
     isWarping = true;
     playCosmicHum(flightDuration / 1000);
     haptic([30, 50, 30]);
 
     // Camera shake on warp engagement
     appEl.classList.add('shake');
-    setTimeout(function() { appEl.classList.remove('shake'); }, 650);
+    setTimeout(function() { appEl.classList.remove('shake'); }, 550);
 
     transitionIndex++;
     triggerPassingPlanet(transitionIndex);
@@ -2026,7 +2029,7 @@ html, body {
 
     if (transitionIndex === 1) {
       flightContext.textContent = 'Her default replies whenever she understands or agrees with what you’re saying paa 😂:';
-      flightStatus.textContent = 'SLOWING TIME DOWN • FLOATING TO CHAPTER 1...';
+      flightStatus.textContent = 'WARPING TO CHAPTER 1 • FLOATING IN SPACE...';
     } else if (transitionIndex === 2) {
       flightContext.textContent = 'I wonder what is going through her mind right now? 😏';
       flightStatus.textContent = 'TUNING INTO HER THOUGHT WAVES...';
@@ -2057,8 +2060,8 @@ html, body {
       // Silky smooth cubic easing for tracker rocket
       var easeP = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
       var curPct = startPct + (endPct - startPct) * easeP;
-      jtFill.style.width = curPct.toFixed(1) + '%';
-      jtRocket.style.left = curPct.toFixed(1) + '%';
+      jtFill.style.width = curPct.toFixed(2) + '%';
+      jtRocket.style.left = curPct.toFixed(2) + '%';
 
       if (activePlanet) {
         activePlanet.progress = progress;
@@ -2225,20 +2228,23 @@ html, body {
         var size = (1 - star.z / 1000) * star.size * (isWarping ? 1.35 : 1);
         var alpha = Math.min(1, (1 - star.z / 1000) * 1.25);
 
-        if (isWarping && warpFactor > 2.2) {
-          var prevK = 280 / (star.z + speed * 15);
+        if (isWarping && warpFactor > 1.25) {
+          var streakMult = (warpFactor - 1.0) * 7;
+          var prevK = 280 / (star.z + speed * (10 + streakMult));
           var prevPx = star.x * prevK + cx;
           var prevPy = star.y * prevK + cy;
 
           ctxSpace.strokeStyle = star.hue === 330 ? 'rgba(255, 120, 180, ' + alpha.toFixed(2) + ')' : 'rgba(235, 230, 255, ' + alpha.toFixed(2) + ')';
-          ctxSpace.lineWidth = Math.max(1.1, size);
+          ctxSpace.lineWidth = Math.max(1.0, size * 0.9);
           ctxSpace.beginPath();
           ctxSpace.moveTo(prevPx, prevPy);
           ctxSpace.lineTo(starPx, starPy);
           ctxSpace.stroke();
         } else {
           ctxSpace.fillStyle = 'rgba(240, 235, 255, ' + alpha.toFixed(2) + ')';
-          ctxSpace.fillRect(starPx - size * 0.5, starPy - size * 0.5, Math.max(1, size), Math.max(1, size));
+          ctxSpace.beginPath();
+          ctxSpace.arc(starPx, starPy, Math.max(0.75, size * 0.65), 0, TAU);
+          ctxSpace.fill();
         }
       }
     }
@@ -2417,6 +2423,16 @@ html, body {
   var springDamp = 0.78;
 
   function updateRunawaySpring() {
+    if (Math.abs(rxTgt - rxCur) < 0.05 && Math.abs(rxVel) < 0.05 && Math.abs(ryTgt - ryCur) < 0.05 && Math.abs(ryVel) < 0.05) {
+      if (rxCur !== rxTgt || ryCur !== ryTgt) {
+        rxCur = rxTgt;
+        ryCur = ryTgt;
+        rxVel = 0;
+        ryVel = 0;
+        runawayBtn.style.transform = 'translate3d(' + rxCur.toFixed(1) + 'px, ' + ryCur.toFixed(1) + 'px, 0)';
+      }
+      return;
+    }
     var fx = (rxTgt - rxCur) * springK;
     rxVel = (rxVel + fx) * springDamp;
     rxCur += rxVel;
@@ -2425,7 +2441,7 @@ html, body {
     ryVel = (ryVel + fy) * springDamp;
     ryCur += ryVel;
 
-    runawayBtn.style.transform = 'translate3d(' + rxCur.toFixed(2) + 'px, ' + ryCur.toFixed(2) + 'px, 0)';
+    runawayBtn.style.transform = 'translate3d(' + rxCur.toFixed(1) + 'px, ' + ryCur.toFixed(1) + 'px, 0)';
   }
 
   var lastTime = performance.now();
