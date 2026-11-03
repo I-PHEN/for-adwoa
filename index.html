@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>A Voyage for Adwoa ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: dark;
+  /* Premium Dark Charcoal Palette */
+  --bg-deep: #121216;
+  --bg-charcoal: #17171e;
+  --bg-card: rgba(24, 24, 31, 0.94);
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --ink: #f5f4f8;
+  --soft: #b2aebf;
+  --muted: #6e6b7d;
+  --pink: #ff6599;
+  --pink-glow: rgba(255, 101, 153, 0.35);
+  --gold: #f5c85c;
+  --gold-glow: rgba(245, 200, 92, 0.35);
+  --cyan: #38ef7d;
+  --flame: #ffb852;
+  --glow: rgba(255, 184, 82, 0.4);
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Strict Zero-Scroll Guarantee: Fixed 100dvh viewport with Silky Dark Charcoal Background */
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  position: fixed;
+  background-color: var(--bg-deep);
+  background: radial-gradient(circle at 50% 25%, #22222a 0%, #15151a 50%, #0e0e12 100%);
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+/* Canvases: Hardware Accelerated & Optimized */
+#canvas-space, #canvas-fx {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  will-change: transform;
+}
+#canvas-space { z-index: 1; }
+#canvas-fx { z-index: 50; }
+
+/* Snugbeats Sound Indicator in Top Right */
+.audio-pill {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(24, 24, 31, 0.88);
+  border: 1px solid var(--border-card);
+  padding: 6px 14px;
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  color: var(--soft);
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+.audio-pill:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: scale(1.03);
+  color: #fff;
+}
+.wave-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 12px;
+}
+.wave-bar {
+  width: 3px;
+  height: 3px;
+  background: var(--pink);
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+.audio-pill.playing .wave-bar:nth-child(1) { animation: wavePulse 1.1s infinite ease-in-out; }
+.audio-pill.playing .wave-bar:nth-child(2) { animation: wavePulse 0.85s infinite ease-in-out 0.15s; }
+.audio-pill.playing .wave-bar:nth-child(3) { animation: wavePulse 1.25s infinite ease-in-out 0.3s; }
+
+/* Main Screen Shell: Centered, Uncluttered, Breathing Room */
+#app {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+.stage-wrapper {
+  width: 100%;
+  max-width: min(92vw, 52rem);
+  height: 100%;
+  max-height: 94dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  perspective: 1200px;
+}
+
+/* ========================================================
+   SCENES & MOTION CHOREOGRAPHY
+   ======================================================== */
+.scene {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  perspective: 1200px;
+}
+
+.scene.active {
+  display: flex;
+}
+
+.m-in { width: 100%; display: flex; justify-content: center; }
+
+/* Choreographed Element Entrances */
+.scene [data-m], .scene [data-split] .ch { opacity: 0; }
+
+.scene.entering [data-m] {
+  animation: var(--anim, riseIn) 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 0.22s + 0.15s);
+}
+.scene.entering [data-split] .ch {
+  animation: chIn 0.9s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  animation-delay: calc(var(--i, 0) * 0.22s + 0.15s + var(--ci, 0) * 0.035s);
+}
+.scene.entered [data-m] { opacity: 1; animation: none; }
+.scene.entered [data-split] .ch {
+  opacity: 1;
+  animation: chFloat 5s ease-in-out infinite;
+  animation-delay: calc(var(--ci, 0) * -0.22s);
+}
+
+/* Leaving: Camera Rushes Forward Past Scene */
+.scene.leaving [data-m], .scene.leaving [data-split] {
+  animation: flyPast 0.9s cubic-bezier(0.55, 0, 0.75, 0.2) both;
+  animation-delay: calc(var(--i, 0) * 0.05s);
+}
+
+.word { display: inline-block; white-space: nowrap; }
+.ch {
+  display: inline-block;
+  transform-origin: 50% 80%;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+}
+.scene.entered .serif-head .ch:hover {
+  transform: translateY(-8px) rotate(-6deg) scale(1.15);
+  color: var(--gold);
+}
+
+/* Finale Title Kinetic Drops */
+.note-title .ch { opacity: 0; }
+.note-title.reveal-in .ch {
+  animation: chDrop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both, chWave 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--ci, 0) * 0.05s), calc(var(--ci, 0) * 0.1s + 1.4s);
+}
+
+/* 3D Tilt Cards with Glare */
+.tilt-card {
+  position: relative;
+  will-change: transform;
+  transform-style: preserve-3d;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+.tilt-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.09), transparent 60%);
+}
+
+/* Badges & Clean Headings */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-card);
+  padding: 4px 12px;
+  border-radius: 18px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--soft);
+  margin-bottom: 12px;
+}
+
+.serif-head {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2rem, 5.2vw, 2.65rem);
+  font-weight: 600;
+  line-height: 1.18;
+  margin-bottom: 10px;
+  color: #fff;
+  letter-spacing: -0.015em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+}
+
+.clean-sub {
+  font-size: clamp(0.92rem, 2.5vw, 1.04rem);
+  line-height: 1.55;
+  color: #c9c5d4;
+  max-width: 32rem;
+  margin-bottom: 18px;
+}
+
+/* Cosmic Action Button */
+.btn-cosmic {
+  background: linear-gradient(135deg, #282833, #191921);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 12px 28px;
+  border-radius: 28px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.65);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
+  touch-action: manipulation;
+}
+.btn-cosmic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+.btn-cosmic:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 101, 153, 0.2);
+  background: linear-gradient(135deg, #323240, #20202a);
+}
+.btn-cosmic:active {
+  transform: scale(0.96) !important;
+}
+
+/* Launch Orb with Orbiting Satellites */
+.orb-wrap {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.orb-wrap .portal-orb {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #262633 0%, #13131a 80%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 0 32px rgba(255, 101, 153, 0.16), inset 0 2px 6px rgba(255, 255, 255, 0.25);
+  position: relative;
+  z-index: 2;
+  animation: floatSlow 3.5s ease-in-out infinite;
+}
+.orbit {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+.orbit span {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+}
+.orbit.o1 { animation: orbitA 6s linear infinite; }
+.orbit.o1 span { background: var(--pink); box-shadow: 0 0 12px var(--pink); }
+.orbit.o2 { inset: -10px; border-color: rgba(255, 207, 86, 0.12); animation: orbitB 9s linear infinite; }
+.orbit.o2 span { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+
+/* Snugbeats Beat-Reactive Pulses */
+.beat .reels-core { animation: beatCore 0.45s ease-out; }
+.beat .cassette-box { animation: cardBeat 0.6s ease-out; }
+.beat .sound-bars-live { animation: barsBeat 0.45s ease-out; }
+
+/* Camera Shake when Warp Engages */
+.shake { animation: shake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+/* ========================================================
+   CINEMATIC TIME-DILATION OVERLAY (9.6s SLOW JOURNEY)
+   ======================================================== */
+.flight-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  background: radial-gradient(circle at center, rgba(18, 18, 24, 0.65) 0%, rgba(12, 12, 16, 0.92) 85%);
+  padding: 24px;
+}
+
+.flight-overlay.active {
+  opacity: 1;
+}
+
+.flight-head {
+  position: absolute;
+  top: max(8vh, 50px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 34rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+
+.flight-badge {
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 800;
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 200, 92, 0.09);
+  border: 1px solid rgba(245, 200, 92, 0.22);
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+.flight-context {
+  font-size: clamp(0.94rem, 3vw, 1.1rem);
+  color: #fff;
+  max-width: 30rem;
+  line-height: 1.5;
+  font-weight: 500;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+}
+
+.flight-foot {
+  position: absolute;
+  bottom: max(5vh, 22px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(88vw, 36rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  z-index: 3;
+}
+
+.flight-status {
+  font-family: monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--soft);
+}
+
+/* Journey Progress Tracker */
+.journey-track {
+  position: relative;
+  width: 100%;
+  height: 46px;
+}
+.jt-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 12px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.jt-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--pink), var(--gold));
+  box-shadow: 0 0 10px var(--pink-glow);
+  transition: width 0.3s ease;
+}
+.jt-stop {
+  position: absolute;
+  top: 13px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.jt-stop b {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #181820;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  transition: all 0.4s ease;
+}
+.jt-stop.reached b {
+  background: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+.jt-stop.target b {
+  border-color: var(--pink);
+  animation: stopPulse 1.4s ease-in-out infinite;
+}
+.jt-stop span {
+  position: absolute;
+  top: 18px;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--soft);
+  white-space: nowrap;
+  font-weight: 700;
+}
+.jt-rocket {
+  position: absolute;
+  top: 13px;
+  left: 0%;
+  font-size: 1.45rem;
+  line-height: 1;
+  transform: translate(-50%, -50%) rotate(45deg);
+  filter: drop-shadow(0 0 8px rgba(255, 150, 60, 0.85));
+  z-index: 2;
+  transition: left 0.3s ease;
+}
+
+/* Transition 1: Words Zooming Past */
+.whisper-cluster {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+.whisper-item {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  white-space: nowrap;
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(2.5rem, 8.5vw, 4.4rem);
+  transform: translate(-50%, -50%) scale(0.1);
+  color: #fff;
+  opacity: 0;
+}
+.w1 { --x: 28%; --y: 46%; text-shadow: 0 0 25px rgba(255, 101, 153, 0.8); }
+.w2 { --x: 72%; --y: 56%; text-shadow: 0 0 25px rgba(245, 200, 92, 0.8); }
+.w3 { --x: 38%; --y: 70%; text-shadow: 0 0 25px rgba(56, 239, 125, 0.7); }
+.w4 { --x: 64%; --y: 38%; text-shadow: 0 0 25px rgba(175, 120, 255, 0.8); }
+
+.flight-overlay.t1 .whisper-cluster { display: block; }
+.flight-overlay.t1 .w1 { animation: zoomPast 3.7s cubic-bezier(0.33, 0, 0.2, 1) 0.5s forwards; }
+.flight-overlay.t1 .w2 { animation: zoomPast 3.7s cubic-bezier(0.33, 0, 0.2, 1) 2.2s forwards; }
+.flight-overlay.t1 .w3 { animation: zoomPast 3.7s cubic-bezier(0.33, 0, 0.2, 1) 3.9s forwards; }
+.flight-overlay.t1 .w4 { animation: zoomPast 3.7s cubic-bezier(0.33, 0, 0.2, 1) 5.6s forwards; }
+
+/* Transition 2: Thought Bubbles */
+.thought-cluster {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+.think-face {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: clamp(3.4rem, 9.5vw, 5.2rem);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  filter: drop-shadow(0 0 20px rgba(245, 200, 92, 0.45));
+}
+.flight-overlay.t2 .thought-cluster { display: block; }
+.flight-overlay.t2 .think-face {
+  animation: faceIn 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards, faceTilt 2.6s ease-in-out 1.8s infinite;
+}
+.thought-bubble {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  max-width: min(78vw, 21rem);
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(24, 24, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 20px;
+  border-radius: 22px;
+  font-size: clamp(0.92rem, 2.8vw, 1.02rem);
+  color: #fff;
+  font-style: italic;
+  opacity: 0;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+.tb1 { --x: 28%; --y: 34%; }
+.tb2 { --x: 72%; --y: 48%; }
+.tb3 { --x: 34%; --y: 68%; }
+.thought-bubble .tl-a, .thought-bubble .tl-b {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(24, 24, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.thought-bubble .tl-a { width: 11px; height: 11px; left: 24px; bottom: -15px; }
+.thought-bubble .tl-b { width: 6px; height: 6px; left: 15px; bottom: -24px; }
+
+.flight-overlay.t2 .tb1 { animation: bubblePop 8s ease-out 1.0s forwards, bubbleBob 3s ease-in-out 1.0s infinite; }
+.flight-overlay.t2 .tb2 { animation: bubblePop 6s ease-out 3.0s forwards, bubbleBob 3.4s ease-in-out 3.0s infinite; }
+.flight-overlay.t2 .tb3 { animation: bubblePop 4s ease-out 5.0s forwards, bubbleBob 2.8s ease-in-out 5.0s infinite; }
+
+/* Transitions 3 & 4: Radar Scan */
+.radar-cluster {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.radar-ring-icon {
+  font-size: 3.2rem;
+  position: relative;
+  animation: radarPulse 2s infinite ease-in-out;
+}
+.radar-ring-icon::before, .radar-ring-icon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cyan);
+  animation: radarWave 2.4s ease-out infinite;
+}
+.radar-ring-icon::after { animation-delay: 1.2s; }
+.radar-coords {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+  background: rgba(56, 239, 125, 0.08);
+  padding: 6px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 239, 125, 0.2);
+}
+.flight-overlay.t3 .radar-cluster,
+.flight-overlay.t4 .radar-cluster { display: flex; }
+
+/* ========================================================
+   SCENE 1: SNUGBEATS VS WiCE
+   ======================================================== */
+.cassette-box {
+  width: 100%;
+  max-width: min(92vw, 36rem);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 18px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.cassette-visual {
+  width: 100%;
+  height: 120px;
+  border-radius: 14px;
+  background: #101015;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.reels {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px dashed rgba(255, 255, 255, 0.25);
+  background: #161620;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinReel 3.8s linear infinite;
+}
+.reels-core {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--pink);
+  box-shadow: 0 0 10px var(--pink-glow);
+  transition: transform 0.25s ease;
+}
+
+.sound-bars-live {
+  display: flex;
+  align-items: flex-end;
+  gap: 4.5px;
+  height: 44px;
+}
+.sound-bar-live {
+  width: 4.5px;
+  background: linear-gradient(to top, var(--pink), var(--gold));
+  border-radius: 3px;
+  animation: eqBounce 1.2s infinite ease-in-out;
+}
+.sound-bar-live:nth-child(2) { animation-delay: 0.15s; }
+.sound-bar-live:nth-child(3) { animation-delay: 0.3s; }
+.sound-bar-live:nth-child(4) { animation-delay: 0.45s; }
+.sound-bar-live:nth-child(5) { animation-delay: 0.6s; }
+.sound-bar-live:nth-child(6) { animation-delay: 0.75s; }
+
+.cassette-quote {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: #fff;
+  margin-top: 14px;
+  font-weight: 600;
+}
+.cassette-punch {
+  font-size: 0.88rem;
+  color: var(--soft);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ========================================================
+   SCENE 2: QUEEN OF YOUTUBE SHORTS (EXPANDED ARENA)
+   ======================================================== */
+.shorts-mini-box {
+  width: 100%;
+  max-width: min(92vw, 40rem);
+  background: #14141b;
+  border: 1px solid var(--border-card);
+  border-radius: 26px;
+  padding: 22px 20px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+}
+
+.shorts-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.yt-icon-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 0.96rem;
+  color: #fff;
+}
+.yt-icon-title svg {
+  width: 20px;
+  height: 20px;
+  fill: #ff0033;
+}
+
+.timestamp-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  color: var(--gold);
+  margin-bottom: 12px;
+  font-family: monospace;
+}
+
+/* Wide Runaway Arena */
+.runaway-arena {
+  width: 100%;
+  height: clamp(240px, 36vh, 340px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  border-radius: 18px;
+}
+
+.runaway-btn {
+  position: absolute;
+  background: linear-gradient(135deg, #e6004c, #ff4d00);
+  color: #fff;
+  border: none;
+  padding: 13px 24px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  border-radius: 26px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(230, 0, 76, 0.45);
+  white-space: nowrap;
+  will-change: transform;
+  touch-action: none;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.runaway-btn.catchable {
+  box-shadow: 0 0 0 4px rgba(0, 230, 118, 0.2), 0 8px 26px rgba(0, 176, 255, 0.5);
+}
+
+.runaway-roast {
+  font-size: 0.86rem;
+  color: var(--gold);
+  min-height: 20px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* ========================================================
+   SCENE 3: ADWOA THE TRAVELER & PHOTO
+   ======================================================== */
+.traveler-box {
+  width: 100%;
+  max-width: min(92vw, 38rem);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 22px;
+  padding: 18px 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-bottom: 16px;
+  text-align: left;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.research-saying {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #fff;
+  font-weight: 600;
+  padding-left: 12px;
+  border-left: 3px solid var(--gold);
+  margin-bottom: 14px;
+}
+
+.photo-and-tribute {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.adwoa-thumb {
+  width: 104px;
+  height: 104px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid rgba(245, 200, 92, 0.3);
+  flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.adwoa-thumb:hover {
+  transform: scale(1.06) rotate(-2deg);
+}
+.adwoa-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: kenBurns 10s ease-in-out infinite alternate;
+}
+
+.tribute-text {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: #f0eaf4;
+}
+.tribute-text strong {
+  color: var(--pink);
+  font-size: 0.9rem;
+}
+
+/* ========================================================
+   SCENE 4: THE CANDLE & THOUGHTFUL FRIEND FINALE
+   ======================================================== */
+.candle-wrapper {
+  position: relative;
+  height: 13rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  transition: height 0.7s cubic-bezier(0.16, 1, 0.3, 1), margin 0.7s ease;
+  margin-bottom: 0.5rem;
+}
+
+.candle-wrapper.shrunk {
+  height: 4.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.candle {
+  appearance: none;
+  border: 0;
+  background: none;
+  cursor: pointer !important;
+  padding: 22px;
+  margin: -22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 25;
+  outline: none;
+  touch-action: manipulation;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.candle, .candle * {
+  cursor: pointer !important;
+}
+.candle:hover {
+  transform: scale(1.08);
+}
+.candle:active {
+  transform: scale(0.96);
+}
+
+.flame {
+  width: 28px;
+  height: 44px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse at 50% 75%, #ffffff 0%, #fff1ba 25%, var(--flame) 58%, #ff8a36 100%);
+  box-shadow: 0 0 35px 16px var(--glow), 0 0 75px 36px rgba(255, 140, 50, 0.2);
+  transform-origin: 50% 100%;
+  animation: flicker 2.2s ease-in-out infinite;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.wick {
+  width: 3px;
+  height: 11px;
+  background: #392b4a;
+  border-radius: 2px;
+  margin-top: 2px;
+}
+
+.wax {
+  width: 42px;
+  height: 86px;
+  background: linear-gradient(90deg, #dfc8af, #f5e6d3 45%, #e0cbb2);
+  border-radius: 6px 6px 4px 4px;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5), inset 0 -4px 6px rgba(0, 0, 0, 0.25);
+}
+
+.plate {
+  width: 120px;
+  height: 10px;
+  background: linear-gradient(90deg, #181820, #2a2a35 50%, #181820);
+  border-radius: 50%;
+  margin-top: -2px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.smoke-particle {
+  position: absolute;
+  left: 50%;
+  bottom: 6.6rem;
+  width: 4px;
+  height: 0;
+  opacity: 0;
+  background: linear-gradient(to top, rgba(210, 210, 230, 0.75), transparent);
+  transform: translateX(-50%);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.out .flame {
+  opacity: 0;
+  transform: scale(0.2) translateY(-14px);
+  animation: none;
+}
+
+.out .smoke-particle {
+  animation: smokeRise 1.8s ease-out forwards;
+}
+
+.candle-hint {
+  margin: 16px 0 0;
+  color: var(--soft);
+  font-style: italic;
+  font-family: "Fraunces", serif;
+  font-size: 1.15rem;
+  animation: breathe 2.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.candle-hint span {
+  display: inline-block;
+  animation: wave 1.8s infinite ease-in-out;
+}
+.out .candle-hint {
+  display: none;
+}
+
+/* Note Reveal: Thoughtful, Warm Friend Vibe */
+.note-section {
+  width: 100%;
+  max-width: 35rem;
+  display: none;
+  opacity: 0;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.7s ease;
+}
+
+.out .note-section {
+  display: flex;
+  opacity: 1;
+}
+
+.note-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 6.2vw, 2.75rem);
+  line-height: 1.15;
+  margin: 0 0 0.85rem;
+  letter-spacing: -0.015em;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(245, 200, 92, 0.4);
+}
+
+.note-line {
+  font-size: clamp(0.94rem, 2.7vw, 1.05rem);
+  line-height: 1.6;
+  margin: 0.48rem auto;
+  max-width: 31rem;
+  color: #eae7f2;
+  text-shadow: 0 2px 14px rgba(7, 7, 10, 0.95);
+  font-weight: 400;
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.note-sign {
+  margin-top: 1.1rem;
+  color: var(--gold);
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
+  opacity: 0;
+  transform: translateY(16px);
+  text-shadow: 0 0 18px rgba(245, 200, 92, 0.35);
+}
+
+.reveal-in {
+  animation: lineFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.finale-bar {
+  margin-top: 1.3rem;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.5s ease;
+}
+.finale-bar.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.replay-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 22px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+.replay-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+/* ========================================================
+   KEYFRAMES
+   ======================================================== */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(35px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dropIn {
+  0% { opacity: 0; transform: translateY(-40px) scale(0.85); }
+  65% { opacity: 1; transform: translateY(4px) scale(1.02); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
+  60% { opacity: 1; transform: scale(1.08) translateY(-2px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes swoopIn {
+  0% { opacity: 0; transform: translateZ(-500px) translateY(100px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes chIn {
+  0% { opacity: 0; transform: translateY(40px) rotateX(-60deg) scale(0.6); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes chFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes chDrop {
+  0% { opacity: 0; transform: translateY(-50px) rotate(-15deg) scale(0.5); }
+  65% { opacity: 1; transform: translateY(5px) rotate(3deg) scale(1.06); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes chWave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes flyPast {
+  0% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(calc((var(--i, 0) - 1.5) * 60px)) translateZ(450px) scale(1.4); }
+}
+@keyframes zoomPast {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.15); }
+  20% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
+  75% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(2.8); }
+}
+@keyframes faceIn {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes faceTilt {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-10deg); }
+  50% { transform: translate(-50%, -50%) rotate(10deg); }
+}
+@keyframes bubblePop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  8% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  14% { transform: translate(-50%, -50%) scale(1); }
+  90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) translateY(-30px) scale(0.7); }
+}
+@keyframes bubbleBob {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-8px); }
+}
+@keyframes radarWave {
+  from { transform: scale(0.4); opacity: 0.8; }
+  to { transform: scale(3); opacity: 0; }
+}
+@keyframes stopPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 101, 153, 0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 101, 153, 0); }
+}
+@keyframes shimmer {
+  0%, 55% { left: -60%; }
+  100% { left: 130%; }
+}
+@keyframes orbitA {
+  from { transform: rotate(-20deg) scaleY(0.36) rotate(0deg); }
+  to { transform: rotate(-20deg) scaleY(0.36) rotate(360deg); }
+}
+@keyframes orbitB {
+  from { transform: rotate(25deg) scaleY(0.3) rotate(360deg); }
+  to { transform: rotate(25deg) scaleY(0.3) rotate(0deg); }
+}
+@keyframes beatCore {
+  0% { transform: scale(1.6); }
+  100% { transform: scale(1); }
+}
+@keyframes cardBeat {
+  0% { border-color: rgba(255, 101, 153, 0.45); }
+  100% { border-color: var(--border-card); }
+}
+@keyframes barsBeat {
+  0% { transform: scaleY(1.3); }
+  100% { transform: scaleY(1); }
+}
+@keyframes kenBurns {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.14); }
+}
+@keyframes shake {
+  10%, 90% { transform: translate(-2px, 1px); }
+  20%, 80% { transform: translate(3px, -2px); }
+  30%, 50%, 70% { transform: translate(-4px, 3px); }
+  40%, 60% { transform: translate(4px, -3px); }
+}
+@keyframes flicker {
+  0%, 100% { transform: scale(1) rotate(-1deg); }
+  25% { transform: scale(1.04, 0.96) rotate(1.5deg); }
+  50% { transform: scale(0.96, 1.04) rotate(-0.5deg); }
+  75% { transform: scale(1.03, 0.98) rotate(1deg); }
+}
+@keyframes smokeRise {
+  0% { height: 0; opacity: 0.85; }
+  100% { height: 90px; opacity: 0; transform: translateX(-50%) translateY(-28px) scaleX(2); }
+}
+@keyframes lineFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes spinReel {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes eqBounce {
+  0%, 100% { height: 8px; }
+  50% { height: 38px; }
+}
+@keyframes wavePulse {
+  0%, 100% { height: 3px; }
+  50% { height: 11px; }
+}
+@keyframes radarPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .tb1, .tb2, .tb3 { --x: 50%; }
+  .tb1 { --y: 30%; }
+  .tb2 { --y: 57%; }
+  .tb3 { --y: 71%; }
+  .think-face { top: 43%; }
+  .w1 { --x: 32%; --y: 42%; }
+  .w2 { --x: 66%; --y: 53%; }
+  .w3 { --x: 38%; --y: 65%; }
+  .w4 { --x: 60%; --y: 34%; }
+  .jt-stop span { font-size: 0.54rem; }
+  .orb-wrap { width: 130px; height: 130px; }
+  .runaway-arena { height: clamp(210px, 32vh, 290px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flame, .candle-hint, .smoke-particle, .portal-orb, .reels, .sound-bar-live, .cassette-box, .shorts-mini-box, .traveler-box { animation: none !important; }
+  .scene, .note-title, .note-line, .note-sign { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+  .scene [data-m], .scene [data-split] .ch, .note-title .ch { opacity: 1 !important; animation: none !important; }
+  .btn-cosmic, .btn-cosmic::before, .orbit, .adwoa-thumb img { animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Dynamic Multi-Layered Space Canvas: Drifting Starfield, Planets & Comets -->
+<canvas id="canvas-space" aria-hidden="true"></canvas>
+
+<!-- Particles, Fireworks, Confetti, Balloons & Stardust Canvas -->
+<canvas id="canvas-fx" aria-hidden="true"></canvas>
+
+<!-- Top Right Audio Pill -->
+<div class="audio-pill" id="audioPill" title="Toggle snugbeats">
+  <div class="wave-bars">
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+  </div>
+  <span id="audioStatusText">♫ snugbeats</span>
+</div>
+
+<!-- Cinematic Time-Dilation Spaceflight Overlay (9.6s Slow Journey) -->
+<div class="flight-overlay" id="flightOverlay" aria-hidden="true">
+  <div class="flight-head">
+    <div class="flight-badge"><span>⏳</span> TIME DILATION IN EFFECT</div>
+    <div class="flight-context" id="flightContext"></div>
+  </div>
+
+  <!-- Transition 1: Her Signature Agreement Filler Words Zooming Past -->
+  <div class="whisper-cluster" id="whisperCluster">
+    <span class="whisper-item w1">Ahuhh...</span>
+    <span class="whisper-item w2">Yhhuh...</span>
+    <span class="whisper-item w3">Uhuhh...</span>
+    <span class="whisper-item w4">Mhmm...</span>
+  </div>
+
+  <!-- Transition 2: Thought Bubbles around Thinking Face -->
+  <div class="thought-cluster" id="thoughtCluster">
+    <div class="think-face">🤔</div>
+    <div class="thought-bubble tb1">
+      <div class="tl-a"></div><div class="tl-b"></div>
+      💭 "Wait... is this whole website for me? 🤨"
+    </div>
+    <div class="thought-bubble tb2">
+      <div class="tl-a"></div><div class="tl-b"></div>
+      💭 "Why is Michael exposing me like this? 😂"
+    </div>
+    <div class="thought-bubble tb3">
+      <div class="tl-a"></div><div class="tl-b"></div>
+      💭 "Hmm, this boy... 🤦‍♀️😂"
+    </div>
+  </div>
+
+  <!-- Transition 3 & 4: Radar / Coordinates Scan -->
+  <div class="radar-cluster" id="radarCluster">
+    <div class="radar-ring-icon" id="radarIcon">🛰️</div>
+    <div class="radar-coords" id="radarCoords">[ LAT 6.8000° N, LON 1.0833° W — AGOGO, GHANA ]</div>
+  </div>
+
+  <div class="flight-foot">
+    <div class="journey-track">
+      <div class="jt-line"><div class="jt-fill" id="jtFill"></div></div>
+      <div class="jt-stop reached" style="left: 0%;"><b></b><span>Start</span></div>
+      <div class="jt-stop" id="stop1" style="left: 25%;"><b></b><span>Snugbeats</span></div>
+      <div class="jt-stop" id="stop2" style="left: 50%;"><b></b><span>5 & 6</span></div>
+      <div class="jt-stop" id="stop3" style="left: 75%;"><b></b><span>Agogo</span></div>
+      <div class="jt-stop" id="stop4" style="left: 100%;"><b></b><span>The Wish</span></div>
+      <div class="jt-rocket" id="jtRocket" style="left: 0%;">🚀</div>
+    </div>
+    <div class="flight-status" id="flightStatus">WARPING TO NEXT COORDINATE...</div>
+  </div>
+</div>
+
+<div id="app">
+  <main class="stage-wrapper">
+
+    <!-- ==========================================
+         SCENE 0: THE LAUNCHPAD
+         ========================================== -->
+    <section class="scene active entering" id="scene0">
+      <div class="orb-wrap" data-m style="--i:0; --anim:popIn;">
+        <div class="orbit o1"><span></span></div>
+        <div class="orbit o2"><span></span></div>
+        <div class="portal-orb">🎧</div>
+      </div>
+      <h1 class="serif-head" data-split data-m style="--i:1; --anim:dropIn;">A Voyage For Adwoa</h1>
+      <p class="clean-sub" data-m style="--i:2; --anim:riseIn; font-size:0.92rem;color:var(--soft);margin-bottom:26px;">
+        Headphones on 🎧
+      </p>
+      <div class="m-in" data-m style="--i:3; --anim:riseIn;">
+        <button class="btn-cosmic" id="btnLaunch">
+          <span>Enter Her Space</span>
+          <span>🚀</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 1: SNUGBEATS VS WiCE
+         ========================================== -->
+    <section class="scene" id="scene1">
+      <div class="tag-pill" data-m style="--i:0; --anim:dropIn;">Chapter 1 • Cozy Beats</div>
+      <h1 class="serif-head" data-split data-m style="--i:1; --anim:dropIn;">The Snugbeats Station 🎧</h1>
+
+      <div class="cassette-box tilt-card" data-m style="--i:2; --anim:swoopIn;">
+        <div class="cassette-visual">
+          <div class="reels"><div class="reels-core"></div></div>
+          <div class="sound-bars-live">
+            <div class="sound-bar-live"></div>
+            <div class="sound-bar-live"></div>
+            <div class="sound-bar-live"></div>
+            <div class="sound-bar-live"></div>
+            <div class="sound-bar-live"></div>
+            <div class="sound-bar-live"></div>
+          </div>
+          <div class="reels"><div class="reels-core"></div></div>
+        </div>
+
+        <div class="cassette-quote">
+          "So you ankasa, as you're listening to the music, ɛnyɛ wo dɛ aa? 😂"
+        </div>
+        <div class="cassette-punch">
+          You killed snugbeats for WiCE, and here you are enjoying my beats... Well, all the best with WiCE!
+        </div>
+      </div>
+
+      <div class="m-in" data-m style="--i:3; --anim:riseIn;">
+        <button class="btn-cosmic" id="btnToShorts">
+          <span>Speaking of YouTube...</span>
+          <span>👀</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 2: QUEEN OF YOUTUBE SHORTS (5 & 6)
+         ========================================== -->
+    <section class="scene" id="scene2">
+      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--pink);">Chapter 2 • 5 & 6</div>
+      <h1 class="serif-head" data-split data-m style="--i:1; --anim:dropIn;">The Queen of YouTube Shorts 👑</h1>
+      <p class="clean-sub" data-m style="--i:2; --anim:riseIn; margin-bottom:14px;">
+        You and YouTube Shorts are literally 5 & 6 🤞😂
+      </p>
+
+      <div class="shorts-mini-box tilt-card" data-m style="--i:3; --anim:swoopIn;">
+        <div class="shorts-head-row">
+          <div class="yt-icon-title">
+            <svg viewBox="0 0 24 24"><path d="M10 14.65v-5.3L15 12l-5 2.65zm7.8-8.77c-.82-1.37-2.31-2.2-3.92-2.2-.42 0-.84.06-1.24.18l-1.99.6c-.34-.41-.78-.73-1.28-.94C8.75 3.27 8.08 3.17 7.4 3.25c-1.61.19-3 1.13-3.76 2.54-.77 1.4-.73 3.09.11 4.47l.47.78c-.28.32-.49.71-.62 1.12-.27.88-.22 1.83.15 2.68.37.85 1.05 1.51 1.9 1.87.42.18.86.27 1.3.27.42 0 .84-.06 1.24-.18l1.99-.6c.34.41.78.73 1.28.94.62.25 1.29.35 1.97.27 1.61-.19 3-1.13 3.76-2.54.77-1.4.73-3.09-.11-4.47l-.47-.78c.28-.32.49-.71.62-1.12.27-.88.22-1.83-.15-2.68-.37-.85-1.05-1.51-1.9-1.87-.42-.18-.86-.27-1.3-.27z"/></svg>
+            <span>Shorts Feed</span>
+          </div>
+          <span style="font-size:0.75rem;color:var(--muted);">Looping forever</span>
+        </div>
+
+        <div class="timestamp-pill">
+          <span>⏱️ 1:30 AM: "Just one more short and I'm sleeping"</span>
+        </div>
+
+        <div class="runaway-arena" id="runawayArena">
+          <button class="runaway-btn" id="runawayBtn">I Promise To Sleep Early Tonight 🤞</button>
+        </div>
+
+        <div class="runaway-roast" id="runawayRoast">Catch the button if you can... 😏</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 3: ADWOA THE TRAVELER & PHOTO
+         ========================================== -->
+    <section class="scene" id="scene3">
+      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--gold);">Chapter 3 • Adwoa The Traveler</div>
+      <h1 class="serif-head" data-split data-m style="--i:1; --anim:dropIn;">Adwoa The Traveler 🌍</h1>
+
+      <div class="traveler-box tilt-card" data-m style="--i:2; --anim:swoopIn;">
+        <div class="research-saying">
+          Don’t worry, you will be a top researcher wae, and you will travel across the world.
+        </div>
+
+        <div class="photo-and-tribute">
+          <div class="adwoa-thumb">
+            <img src="adwoa.jpg" alt="Adwoa at Agogo Hospital" />
+          </div>
+          <div class="tribute-text">
+            <strong>Breast Cancer Awareness:</strong> Honestly, the way you took that awareness needs to be studied. Always sharing, so mindful of people. Really, really cool of you.
+          </div>
+        </div>
+      </div>
+
+      <div class="m-in" data-m style="--i:3; --anim:riseIn;">
+        <button class="btn-cosmic" id="btnToCandle">
+          <span>One last destination</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 4: THE CANDLE & THOUGHTFUL FRIEND FINALE
+         ========================================== -->
+    <section class="scene" id="scene4">
+      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:#ffb852;">The Finale • Birthday Wishes 🎂</div>
+
+      <div class="candle-wrapper" id="candleStage" data-m style="--i:1; --anim:popIn;">
+        <div class="smoke-particle" aria-hidden="true"></div>
+        <button class="candle" id="candleBtn" aria-label="Tap to blow out the candle">
+          <div class="flame"></div>
+          <div class="wick"></div>
+          <div class="wax"></div>
+        </button>
+        <div class="plate" aria-hidden="true"></div>
+      </div>
+
+      <p class="candle-hint" id="candleHint" data-m style="--i:2; --anim:riseIn;">
+        <span>✨</span> Tap the candle, Adwoa <span>✨</span>
+      </p>
+
+      <div class="note-section" aria-live="polite">
+        <h1 class="note-title" id="noteTitle" data-split>Happy Birthday, Adwoa! 🎂🎉</h1>
+        <p class="note-line" id="line1">You’re someone who actually remembers. Days after I mentioned my week of touching grass, you asked how it went.</p>
+        <p class="note-line" id="line2">And whenever I tell you I’m going through something, like when I’m sick, the care and emotional vibes you give say so much about how deeply you care about others.</p>
+        <p class="note-line" id="line3">Having a thoughtful friend who pays attention to the little things like that means a lot. Thank you. I hope this year is extra good to you!</p>
+        <p class="note-sign" id="noteSign">— Your friend, Michael</p>
+
+        <div class="finale-bar" id="finaleBar">
+          <button class="replay-btn" id="replayBtn">↺ Experience the voyage again</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ==========================================
+     SCRIPTS: LUSH AUDIO & HYPER-OPTIMIZED 60FPS ENGINE
+     ========================================== -->
+<script>
+(function() {
+  'use strict';
+
+  var R = Math.random, TAU = Math.PI * 2;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ========================================================
+     TEXT-SPLITTING UTILITY (LETTER-BY-LETTER KINETIC MOTION)
+     ======================================================== */
+  function initSplitText() {
+    document.querySelectorAll('[data-split]').forEach(function(el) {
+      if (el.dataset.splitDone) return;
+      el.dataset.splitDone = '1';
+      var text = el.textContent.trim();
+      var words = text.split(/\s+/);
+      var charIdx = 0;
+      el.innerHTML = words.map(function(w) {
+        var chars = Array.from(w).map(function(ch) {
+          return '<span class="ch" style="--ci:' + (charIdx++) + '">' + ch + '</span>';
+        }).join('');
+        return '<span class="word">' + chars + '</span>';
+      }).join(' ');
+    });
+  }
+  initSplitText();
+
+  /* ========================================================
+     3D CARD TILT & DYNAMIC GLARE (LIGHTWEIGHT)
+     ======================================================== */
+  function initTiltCards() {
+    var cards = document.querySelectorAll('.tilt-card');
+    cards.forEach(function(card) {
+      card.addEventListener('pointermove', function(e) {
+        if (reduce || e.pointerType === 'touch') return;
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var cx = rect.width / 2;
+        var cy = rect.height / 2;
+        var rotX = ((y - cy) / cy) * -7;
+        var rotY = ((x - cx) / cx) * 7;
+        card.style.transform = 'perspective(900px) rotateX(' + rotX.toFixed(1) + 'deg) rotateY(' + rotY.toFixed(1) + 'deg) scale3d(1.01, 1.01, 1.01)';
+        card.style.setProperty('--gx', ((x / rect.width) * 100).toFixed(0) + '%');
+        card.style.setProperty('--gy', ((y / rect.height) * 100).toFixed(0) + '%');
+      });
+      card.addEventListener('pointerleave', function() {
+        card.style.transform = '';
+        card.style.setProperty('--gx', '50%');
+        card.style.setProperty('--gy', '0%');
+      });
+    });
+  }
+  initTiltCards();
+
+  /* ========================================================
+     MAGNETIC BUTTONS (DESKTOP ONLY FOR MAX PERFORMANCE)
+     ======================================================== */
+  function initMagneticButtons() {
+    document.querySelectorAll('.btn-cosmic').forEach(function(btn) {
+      btn.addEventListener('pointermove', function(e) {
+        if (reduce || e.pointerType === 'touch') return;
+        var rect = btn.getBoundingClientRect();
+        var bx = rect.left + rect.width / 2;
+        var by = rect.top + rect.height / 2;
+        var dx = (e.clientX - bx) * 0.24;
+        var dy = (e.clientY - by) * 0.24;
+        btn.style.transform = 'translate(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px) scale(1.02)';
+      });
+      btn.addEventListener('pointerleave', function() {
+        btn.style.transform = '';
+      });
+    });
+  }
+  initMagneticButtons();
+
+  /* ========================================================
+     SWEET SNUGBEATS LO-FI ENGINE & BEAT-REACTIVE PULSES
+     ======================================================== */
+  var audioCtx = null;
+  var isPlayingSnugbeats = false;
+  var songTimer = null;
+  var masterGain = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) audioCtx = new AudioContext();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  function triggerBeatPulse() {
+    document.body.classList.add('beat');
+    setTimeout(function() {
+      document.body.classList.remove('beat');
+    }, 400);
+  }
+
+  function playRhodesNote(freq, startTime, duration, velocity) {
+    if (!audioCtx || !isPlayingSnugbeats) return;
+    var osc1 = audioCtx.createOscillator();
+    var osc2 = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    var filter = audioCtx.createBiquadFilter();
+
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(freq, startTime);
+
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(freq * 1.002, startTime);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(850, startTime);
+    filter.frequency.exponentialRampToValueAtTime(320, startTime + duration);
+
+    var vel = velocity || 0.055;
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.linearRampToValueAtTime(vel, startTime + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterGain || audioCtx.destination);
+
+    osc1.start(startTime);
+    osc2.start(startTime);
+    osc1.stop(startTime + duration + 0.05);
+    osc2.stop(startTime + duration + 0.05);
+  }
+
+  function playMusicBoxBell(freq, startTime) {
+    if (!audioCtx || !isPlayingSnugbeats) return;
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, startTime);
+
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.linearRampToValueAtTime(0.035, startTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.2);
+
+    osc.connect(gain);
+    gain.connect(masterGain || audioCtx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + 1.3);
+  }
+
+  function playLoFiKick(startTime) {
+    if (!audioCtx || !isPlayingSnugbeats) return;
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(95, startTime);
+    osc.frequency.exponentialRampToValueAtTime(38, startTime + 0.16);
+
+    gain.gain.setValueAtTime(0.09, startTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.25);
+
+    osc.connect(gain);
+    gain.connect(masterGain || audioCtx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + 0.26);
+
+    setTimeout(triggerBeatPulse, Math.max(0, (startTime - audioCtx.currentTime) * 1000));
+  }
+
+  function playLoFiSnap(startTime) {
+    if (!audioCtx || !isPlayingSnugbeats) return;
+    var bufSize = audioCtx.sampleRate * 0.08;
+    var buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < bufSize; i++) d[i] = (R() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.015));
+
+    var src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    var flt = audioCtx.createBiquadFilter();
+    flt.type = 'bandpass';
+    flt.frequency.setValueAtTime(1400, startTime);
+    flt.Q.setValueAtTime(1.2, startTime);
+
+    var gn = audioCtx.createGain();
+    gn.gain.setValueAtTime(0.03, startTime);
+    gn.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.08);
+
+    src.connect(flt);
+    flt.connect(gn);
+    gn.connect(masterGain || audioCtx.destination);
+    src.start(startTime);
+  }
+
+  var songChords = [
+    { root: 87.31, notes: [174.61, 220.00, 261.63, 329.63] },
+    { root: 82.41, notes: [164.81, 196.00, 246.94, 293.66] },
+    { root: 73.42, notes: [146.83, 220.00, 261.63, 329.63] },
+    { root: 65.41, notes: [130.81, 196.00, 246.94, 329.63] }
+  ];
+  var bellMelodies = [
+    [523.25, 659.25, 783.99],
+    [587.33, 493.88],
+    [440.00, 523.25, 659.25],
+    [392.00, 493.88, 523.25]
+  ];
+  var barIndex = 0;
+
+  function scheduleLoFiMeasure() {
+    if (!isPlayingSnugbeats || !audioCtx) return;
+    var now = audioCtx.currentTime;
+    var bar = songChords[barIndex % songChords.length];
+    var bells = bellMelodies[barIndex % bellMelodies.length];
+    var measureDuration = 3.3;
+
+    playRhodesNote(bar.root, now, measureDuration * 0.9, 0.05);
+    bar.notes.forEach(function(freq) {
+      playRhodesNote(freq, now, measureDuration * 0.85, 0.04);
+    });
+
+    playLoFiKick(now);
+    playLoFiKick(now + 1.65);
+    playLoFiSnap(now + 0.825);
+    playLoFiSnap(now + 2.475);
+
+    if (bells[0]) playMusicBoxBell(bells[0], now + 0.85);
+    if (bells[1]) playMusicBoxBell(bells[1], now + 1.8);
+    if (bells[2]) playMusicBoxBell(bells[2], now + 2.6);
+
+    barIndex++;
+    songTimer = setTimeout(scheduleLoFiMeasure, 3300);
+  }
+
+  function startSnugbeats() {
+    initAudio();
+    if (!audioCtx) return;
+    if (!masterGain) {
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.7, audioCtx.currentTime);
+      masterGain.connect(audioCtx.destination);
+    }
+    isPlayingSnugbeats = true;
+    audioPill.classList.add('playing');
+    audioStatusText.textContent = '♫ snugbeats (playing)';
+    scheduleLoFiMeasure();
+  }
+
+  function stopSnugbeats() {
+    isPlayingSnugbeats = false;
+    clearTimeout(songTimer);
+    audioPill.classList.remove('playing');
+    audioStatusText.textContent = '♫ snugbeats (paused)';
+  }
+
+  var audioPill = document.getElementById('audioPill');
+  var audioStatusText = document.getElementById('audioStatusText');
+  audioPill.addEventListener('click', function() {
+    initAudio();
+    if (isPlayingSnugbeats) stopSnugbeats();
+    else startSnugbeats();
+  });
+
+  // Sound FX
+  function playBlowSound() {
+    if (!audioCtx) return;
+    try {
+      var bufferSize = audioCtx.sampleRate * 0.75;
+      var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      var data = buffer.getChannelData(0);
+      for (var i = 0; i < bufferSize; i++) data[i] = (R() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.22));
+      var noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+      var flt = audioCtx.createBiquadFilter();
+      flt.type = 'lowpass';
+      flt.frequency.setValueAtTime(550, audioCtx.currentTime);
+      flt.frequency.exponentialRampToValueAtTime(90, audioCtx.currentTime + 0.7);
+
+      var gn = audioCtx.createGain();
+      gn.gain.setValueAtTime(0.35, audioCtx.currentTime);
+      gn.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.7);
+
+      noise.connect(flt);
+      flt.connect(gn);
+      gn.connect(audioCtx.destination);
+      noise.start();
+    } catch(e) {}
+  }
+
+  function playChime(freq, offset, duration) {
+    if (!audioCtx) return;
+    try {
+      var t = audioCtx.currentTime + (offset || 0);
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(0.18, t + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + (duration || 1.1));
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + (duration || 1.1) + 0.1);
+    } catch(e) {}
+  }
+
+  function playBoing() {
+    if (!audioCtx) return;
+    try {
+      var t = audioCtx.currentTime;
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(220, t);
+      osc.frequency.exponentialRampToValueAtTime(620, t + 0.18);
+      osc.frequency.exponentialRampToValueAtTime(300, t + 0.32);
+
+      gain.gain.setValueAtTime(0.18, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.36);
+    } catch(e) {}
+  }
+
+  function playCosmicHum(duration) {
+    if (!audioCtx) return;
+    try {
+      var t = audioCtx.currentTime;
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(55, t);
+      osc.frequency.exponentialRampToValueAtTime(115, t + duration * 0.5);
+      osc.frequency.exponentialRampToValueAtTime(45, t + duration);
+
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(0.15, t + 1.0);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + duration + 0.1);
+    } catch(e) {}
+  }
+
+  function playSuccessFanfare() {
+    if (!audioCtx) return;
+    var notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+    notes.forEach(function(freq, idx) {
+      playChime(freq, idx * 0.09, 1.4);
+    });
+  }
+
+  function haptic(pattern) {
+    if (navigator.vibrate) {
+      try { navigator.vibrate(pattern || 30); } catch(e) {}
+    }
+  }
+
+  /* ========================================================
+     CANVAS 1 & 2: HIGH-PERFORMANCE 60FPS ENGINE
+     ======================================================== */
+  var cSpace = document.getElementById('canvas-space');
+  var ctxSpace = cSpace.getContext('2d', { alpha: true });
+  var cFx = document.getElementById('canvas-fx');
+  var ctxFx = cFx.getContext('2d', { alpha: true });
+
+  var W, H;
+  var isMobile = (window.innerWidth < 680 || ('ontouchstart' in window) || navigator.maxTouchPoints > 0);
+  // Cap DPR at 1.5 on mobile to double GPU fillrate while preserving retina crispness
+  var dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2);
+
+  var targetParallaxX = 0, targetParallaxY = 0;
+  var curParallaxX = 0, curParallaxY = 0;
+
+  function resize() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    isMobile = (W < 680 || ('ontouchstart' in window) || navigator.maxTouchPoints > 0);
+    dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2);
+
+    [cSpace, cFx].forEach(function(c) {
+      c.width = W * dpr;
+      c.height = H * dpr;
+      c.style.width = W + 'px';
+      c.style.height = H + 'px';
+      c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+    });
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  window.addEventListener('pointermove', function(e) {
+    if (e.pointerType === 'touch') return;
+    targetParallaxX = (e.clientX / W - 0.5) * 35;
+    targetParallaxY = (e.clientY / H - 0.5) * 35;
+  });
+
+  // 1. Starfield 3D (Optimized count for mobile)
+  var numStars = isMobile ? 125 : 185;
+  var stars3D = [];
+  var isWarping = false;
+  var warpFactor = 1.0;
+
+  for (var i = 0; i < numStars; i++) {
+    stars3D.push({
+      x: (R() - 0.5) * 1600,
+      y: (R() - 0.5) * 1600,
+      z: R() * 1000 + 1,
+      size: 0.8 + R() * 1.5,
+      hue: R() > 0.45 ? 240 : (R() > 0.5 ? 330 : 45)
+    });
+  }
+
+  // 2. Cosmic Dust Motes
+  var numDust = isMobile ? 28 : 55;
+  var dustMotes = [];
+  for (var d = 0; d < numDust; d++) {
+    dustMotes.push({
+      x: R() * 1800 - 100,
+      y: R() * 1800 - 100,
+      vx: (R() - 0.5) * 14,
+      vy: -8 - R() * 18,
+      size: 1.1 + R() * 1.8,
+      phase: R() * TAU,
+      alpha: 0.25 + R() * 0.35,
+      color: R() > 0.6 ? 'rgba(255, 101, 153, ' : (R() > 0.3 ? 'rgba(245, 200, 92, ' : 'rgba(160, 180, 255, ')
+    });
+  }
+
+  // 3. Comets / Shooting Stars
+  var comets = [];
+  var lastCometTime = 0;
+
+  function spawnComet() {
+    var startX = R() * W * 1.2;
+    var startY = R() * H * 0.3;
+    var speed = 380 + R() * 320;
+    var angle = Math.PI * 0.75 + (R() - 0.5) * 0.25;
+    comets.push({
+      x: startX,
+      y: startY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      length: 100 + R() * 80,
+      life: 1.0,
+      decay: 0.75 + R() * 0.45,
+      width: 1.6 + R() * 1.2
+    });
+  }
+
+  // 4. Passing Celestial Bodies (Planets during Warp Flight)
+  var celestialPlanets = [
+    { name: 'Saturn Rings', hue: 45, maxR: 75, ring: true, ringColor: 'rgba(245, 200, 92, 0.5)', xSide: -0.65 },
+    { name: 'Neptune Cyan', hue: 195, maxR: 62, ring: false, xSide: 0.7 },
+    { name: 'Magenta Giant', hue: 330, maxR: 82, ring: true, ringColor: 'rgba(255, 101, 153, 0.45)', xSide: -0.6 },
+    { name: 'Emerald Oasis', hue: 155, maxR: 58, ring: false, xSide: 0.65 }
+  ];
+  var activePlanet = null;
+
+  function triggerPassingPlanet(index) {
+    var spec = celestialPlanets[(index - 1) % celestialPlanets.length];
+    activePlanet = {
+      spec: spec,
+      progress: 0
+    };
+  }
+
+  // 5. Sky Lanterns & Golden Stardust
+  var lanterns = [], stardust = [], sparks = [], confetti = [], balloons = [];
+  var lanternsActive = false, stardustActive = false, balloonsActive = false;
+
+  var numLanterns = isMobile ? 12 : 18;
+  for (var k = 0; k < numLanterns; k++) {
+    lanterns.push({ x: R(), y: H + 50 + R() * H * 0.8, scale: 0.65 + R() * 0.65, v: 22 + R() * 18, p: R() * TAU });
+  }
+
+  var numStardust = isMobile ? 28 : 45;
+  for (var s = 0; s < numStardust; s++) {
+    stardust.push({ x: R() * 1800, y: -R() * 900, size: 2 + R() * 2.5, v: 26 + R() * 28, p: R() * TAU, r: R() * TAU });
+  }
+
+  // Celebration Balloons for the Finale
+  var balloonPalette = [
+    { fill: 'rgba(255, 101, 153, 0.9)' },
+    { fill: 'rgba(245, 200, 92, 0.9)' },
+    { fill: 'rgba(56, 239, 125, 0.9)' },
+    { fill: 'rgba(175, 120, 255, 0.9)' }
+  ];
+  var numBalloons = isMobile ? 10 : 16;
+  for (var bIdx = 0; bIdx < numBalloons; bIdx++) {
+    balloons.push({
+      x: W * (0.08 + R() * 0.84),
+      y: H + 60 + R() * H * 0.8,
+      v: 28 + R() * 24,
+      rw: 17 + R() * 7,
+      rh: 22 + R() * 9,
+      phase: R() * TAU,
+      sway: 16 + R() * 14,
+      palette: balloonPalette[bIdx % balloonPalette.length]
+    });
+  }
+
+  // 9.6-Second Deliberate Slow-Motion Space Flight Overlay
+  var flightOverlay = document.getElementById('flightOverlay');
+  var flightStatus = document.getElementById('flightStatus');
+  var flightContext = document.getElementById('flightContext');
+  var radarCoords = document.getElementById('radarCoords');
+  var radarIcon = document.getElementById('radarIcon');
+  var jtFill = document.getElementById('jtFill');
+  var jtRocket = document.getElementById('jtRocket');
+  var appEl = document.getElementById('app');
+
+  var transitionIndex = 0;
+
+  function performCinematicFlight(fromEl, toEl) {
+    if (reduce) {
+      fromEl.classList.remove('active', 'entered');
+      toEl.classList.add('active', 'entered');
+      return;
+    }
+
+    var flightDuration = 9600;
+    isWarping = true;
+    playCosmicHum(flightDuration / 1000);
+    haptic([30, 50, 30]);
+
+    // Camera shake on warp engagement
+    appEl.classList.add('shake');
+    setTimeout(function() { appEl.classList.remove('shake'); }, 650);
+
+    transitionIndex++;
+    triggerPassingPlanet(transitionIndex);
+
+    var targetStopEl = document.getElementById('stop' + transitionIndex);
+    if (targetStopEl) targetStopEl.classList.add('target');
+
+    flightOverlay.className = 'flight-overlay active t' + transitionIndex;
+
+    if (transitionIndex === 1) {
+      flightContext.textContent = 'Her default replies whenever she understands or agrees with what you’re saying paa 😂:';
+      flightStatus.textContent = 'SLOWING TIME DOWN • FLOATING TO CHAPTER 1...';
+    } else if (transitionIndex === 2) {
+      flightContext.textContent = 'I wonder what is going through her mind right now? 😏';
+      flightStatus.textContent = 'TUNING INTO HER THOUGHT WAVES...';
+    } else if (transitionIndex === 3) {
+      flightContext.textContent = 'Locating: Agogo’s favorite traveler...';
+      radarIcon.textContent = '🛰️';
+      radarCoords.textContent = '[ LAT 6.8000° N, LON 1.0833° W — AGOGO, GHANA ]';
+      flightStatus.textContent = 'SATELLITE COORDINATES LOCKED...';
+    } else {
+      flightContext.textContent = 'Powering down all engines. The whole galaxy is quiet now.';
+      radarIcon.textContent = '🌌';
+      radarCoords.textContent = '[ PREPARING BIRTHDAY CELEBRATION ]';
+      flightStatus.textContent = 'ENTERING FINAL COORDINATES...';
+    }
+
+    fromEl.classList.add('leaving');
+    setTimeout(function() {
+      fromEl.classList.remove('active', 'leaving', 'entered');
+    }, 600);
+
+    var startPct = (transitionIndex - 1) * 25;
+    var endPct = transitionIndex * 25;
+
+    var startTime = performance.now();
+    function animateFlight(now) {
+      var progress = (now - startTime) / flightDuration;
+
+      var curPct = startPct + (endPct - startPct) * Math.min(1, progress);
+      jtFill.style.width = curPct.toFixed(1) + '%';
+      jtRocket.style.left = curPct.toFixed(1) + '%';
+
+      if (activePlanet) {
+        activePlanet.progress = progress;
+      }
+
+      if (progress < 0.25) {
+        warpFactor = 1.0 + (progress / 0.25) * 2.2;
+      } else if (progress < 0.78) {
+        warpFactor = 3.2;
+      } else if (progress < 1.0) {
+        warpFactor = 3.2 - ((progress - 0.78) / 0.22) * 2.2;
+      } else {
+        warpFactor = 1.0;
+        isWarping = false;
+        activePlanet = null;
+
+        if (targetStopEl) {
+          targetStopEl.classList.remove('target');
+          targetStopEl.classList.add('reached');
+        }
+
+        flightOverlay.className = 'flight-overlay';
+        toEl.classList.add('active', 'entering');
+        playChime(620, 0, 0.8);
+
+        setTimeout(function() {
+          toEl.classList.remove('entering');
+          toEl.classList.add('entered');
+        }, 1300);
+        return;
+      }
+      requestAnimationFrame(animateFlight);
+    }
+    requestAnimationFrame(animateFlight);
+  }
+
+  function drawSpace(t, dt) {
+    ctxSpace.clearRect(0, 0, W, H);
+
+    curParallaxX += (targetParallaxX - curParallaxX) * 0.05;
+    curParallaxY += (targetParallaxY - curParallaxY) * 0.05;
+
+    var cx = W / 2 + curParallaxX;
+    var cy = H / 2 + curParallaxY;
+
+    // 1. Ambient Floating Cosmic Dust (Fast fill, 0 shadowBlur)
+    for (var d = 0; d < dustMotes.length; d++) {
+      var dm = dustMotes[d];
+      dm.y += dm.vy * dt;
+      dm.x += (dm.vx + Math.sin(t * 0.001 + dm.phase) * 10) * dt;
+      if (dm.y < -20) dm.y = H + 20;
+      if (dm.x < -20) dm.x = W + 20;
+      if (dm.x > W + 20) dm.x = -20;
+
+      var drawX = dm.x + curParallaxX * 0.4;
+      var drawY = dm.y + curParallaxY * 0.4;
+      var a = dm.alpha * (0.8 + 0.2 * Math.sin(t * 0.002 + dm.phase));
+      ctxSpace.fillStyle = dm.color + a.toFixed(2) + ')';
+      ctxSpace.beginPath();
+      ctxSpace.arc(drawX, drawY, dm.size, 0, TAU);
+      ctxSpace.fill();
+    }
+
+    // 2. Comets / Shooting Stars
+    if (t - lastCometTime > 3400 + R() * 2600) {
+      spawnComet();
+      lastCometTime = t;
+    }
+    for (var cIdx = comets.length - 1; cIdx >= 0; cIdx--) {
+      var c = comets[cIdx];
+      c.x += c.vx * dt;
+      c.y += c.vy * dt;
+      c.life -= c.decay * dt;
+      if (c.life <= 0 || c.x < -100 || c.y > H + 100) {
+        comets.splice(cIdx, 1);
+        continue;
+      }
+      var tailX = c.x - (c.vx / 380) * c.length;
+      var tailY = c.y - (c.vy / 380) * c.length;
+      var cometGrad = ctxSpace.createLinearGradient(c.x, c.y, tailX, tailY);
+      cometGrad.addColorStop(0, 'rgba(255, 255, 255, ' + c.life.toFixed(2) + ')');
+      cometGrad.addColorStop(0.3, 'rgba(245, 200, 92, ' + (c.life * 0.7).toFixed(2) + ')');
+      cometGrad.addColorStop(1, 'rgba(255, 101, 153, 0)');
+
+      ctxSpace.strokeStyle = cometGrad;
+      ctxSpace.lineWidth = c.width;
+      ctxSpace.beginPath();
+      ctxSpace.moveTo(c.x, c.y);
+      ctxSpace.lineTo(tailX, tailY);
+      ctxSpace.stroke();
+    }
+
+    // 3. Passing Celestial Planet during Flight (Rendered with pure radial gradient, 0 shadowBlur)
+    if (activePlanet && activePlanet.progress > 0.1 && activePlanet.progress < 0.9) {
+      var p = activePlanet;
+      var pNorm = (p.progress - 0.1) / 0.8;
+      var pScale = Math.sin(pNorm * Math.PI);
+      var pRadius = p.spec.maxR * pScale;
+      var px = cx + (p.spec.xSide * W * 0.45) * (0.4 + pNorm * 0.9);
+      var py = cy + (pNorm - 0.5) * H * 0.5;
+
+      ctxSpace.save();
+      ctxSpace.translate(px, py);
+
+      // Planet Sphere
+      var pGrad = ctxSpace.createRadialGradient(-pRadius * 0.35, -pRadius * 0.35, pRadius * 0.1, 0, 0, pRadius);
+      pGrad.addColorStop(0, 'hsla(' + p.spec.hue + ', 85%, 80%, ' + (pScale * 0.95).toFixed(2) + ')');
+      pGrad.addColorStop(0.5, 'hsla(' + p.spec.hue + ', 70%, 42%, ' + (pScale * 0.85).toFixed(2) + ')');
+      pGrad.addColorStop(1, 'hsla(' + p.spec.hue + ', 85%, 10%, ' + (pScale * 0.9).toFixed(2) + ')');
+
+      ctxSpace.fillStyle = pGrad;
+      ctxSpace.beginPath();
+      ctxSpace.arc(0, 0, Math.max(1, pRadius), 0, TAU);
+      ctxSpace.fill();
+
+      // Atmospheric Halo (Lightweight Gradient Circle instead of slow shadowBlur)
+      var haloGrad = ctxSpace.createRadialGradient(0, 0, pRadius * 0.85, 0, 0, pRadius * 1.35);
+      haloGrad.addColorStop(0, 'hsla(' + p.spec.hue + ', 95%, 70%, ' + (pScale * 0.4).toFixed(2) + ')');
+      haloGrad.addColorStop(1, 'hsla(' + p.spec.hue + ', 95%, 70%, 0)');
+      ctxSpace.fillStyle = haloGrad;
+      ctxSpace.beginPath();
+      ctxSpace.arc(0, 0, pRadius * 1.35, 0, TAU);
+      ctxSpace.fill();
+
+      // Planet Rings if applicable
+      if (p.spec.ring) {
+        ctxSpace.strokeStyle = p.spec.ringColor;
+        ctxSpace.lineWidth = Math.max(1.5, 4 * pScale);
+        ctxSpace.beginPath();
+        ctxSpace.ellipse(0, 0, pRadius * 2.1, pRadius * 0.42, -0.3, 0, TAU);
+        ctxSpace.stroke();
+      }
+
+      ctxSpace.restore();
+    }
+
+    // 4. Glowing Hyperspace Tunnel Rings
+    if (isWarping && warpFactor > 1.8) {
+      for (var r = 1; r <= 3; r++) {
+        var ringRadius = ((t * 0.05 * r) % 420) + 40;
+        var ringAlpha = Math.max(0, 1 - ringRadius / 450) * 0.2;
+        ctxSpace.strokeStyle = r % 2 === 0 ? 'rgba(255, 101, 153, ' + ringAlpha + ')' : 'rgba(245, 200, 92, ' + ringAlpha + ')';
+        ctxSpace.lineWidth = 2;
+        ctxSpace.beginPath();
+        ctxSpace.arc(cx, cy, ringRadius, 0, TAU);
+        ctxSpace.stroke();
+      }
+    }
+
+    // 5. 3D Starfield
+    var speed = (isWarping ? 55 : 34) * dt * warpFactor;
+
+    for (var i = 0; i < stars3D.length; i++) {
+      var star = stars3D[i];
+      star.z -= speed * 10;
+      if (star.z <= 0) {
+        star.z = 1000;
+        star.x = (R() - 0.5) * 1600;
+        star.y = (R() - 0.5) * 1600;
+      }
+
+      var k = 280 / star.z;
+      var starPx = star.x * k + cx;
+      var starPy = star.y * k + cy;
+
+      if (starPx >= 0 && starPx <= W && starPy >= 0 && starPy <= H) {
+        var size = (1 - star.z / 1000) * star.size * (isWarping ? 1.35 : 1);
+        var alpha = Math.min(1, (1 - star.z / 1000) * 1.25);
+
+        if (isWarping && warpFactor > 2.2) {
+          var prevK = 280 / (star.z + speed * 15);
+          var prevPx = star.x * prevK + cx;
+          var prevPy = star.y * prevK + cy;
+
+          ctxSpace.strokeStyle = star.hue === 330 ? 'rgba(255, 120, 180, ' + alpha.toFixed(2) + ')' : 'rgba(235, 230, 255, ' + alpha.toFixed(2) + ')';
+          ctxSpace.lineWidth = Math.max(1.1, size);
+          ctxSpace.beginPath();
+          ctxSpace.moveTo(prevPx, prevPy);
+          ctxSpace.lineTo(starPx, starPy);
+          ctxSpace.stroke();
+        } else {
+          ctxSpace.fillStyle = 'rgba(240, 235, 255, ' + alpha.toFixed(2) + ')';
+          ctxSpace.beginPath();
+          ctxSpace.arc(starPx, starPy, Math.max(0.65, size), 0, TAU);
+          ctxSpace.fill();
+        }
+      }
+    }
+
+    // 6. Finale Sky Lanterns
+    if (lanternsActive) {
+      for (var j = 0; j < lanterns.length; j++) {
+        var l = lanterns[j];
+        l.y -= l.v * dt;
+        if (l.y < -70) l.y = H + 40 + R() * 80;
+        var lx = l.x * W + Math.sin(t * 0.001 + l.p) * 20;
+        var lw = 26 * l.scale, lh = 34 * l.scale;
+
+        var lg = ctxSpace.createRadialGradient(lx, l.y, 0, lx, l.y, lh * 2);
+        lg.addColorStop(0, 'rgba(255, 185, 80, 0.42)');
+        lg.addColorStop(1, 'rgba(255, 185, 80, 0)');
+        ctxSpace.fillStyle = lg;
+        ctxSpace.beginPath();
+        ctxSpace.arc(lx, l.y, lh * 2, 0, TAU);
+        ctxSpace.fill();
+
+        ctxSpace.fillStyle = 'rgba(255, 200, 115, 0.95)';
+        ctxSpace.beginPath();
+        ctxSpace.ellipse(lx, l.y, lw / 2, lh / 2, 0, 0, TAU);
+        ctxSpace.fill();
+      }
+    }
+
+    // 7. Finale Golden Stardust Shower (High performance, 0 shadowBlur)
+    if (stardustActive) {
+      for (var m = 0; m < stardust.length; m++) {
+        var sd = stardust[m];
+        sd.y += sd.v * dt;
+        sd.r += dt * 3;
+        var sx = (sd.x % W) + Math.sin(t * 0.0012 + sd.p) * 24;
+        if (sd.y > H + 20) { sd.y = -20; sd.x = R() * W; }
+
+        ctxSpace.save();
+        ctxSpace.translate(sx, sd.y);
+        ctxSpace.rotate(sd.r);
+        ctxSpace.fillStyle = 'rgba(245, 200, 92, 0.9)';
+        ctxSpace.beginPath();
+        ctxSpace.arc(0, 0, sd.size, 0, TAU);
+        ctxSpace.fill();
+        ctxSpace.restore();
+      }
+    }
+  }
+
+  /* ========================================================
+     CANVAS 2: BURSTS, BALLOONS & CONFETTI (CONDITIONAL RENDER)
+     ======================================================== */
+  var hues = [45, 335, 275, 195, 25];
+
+  function addBurst(x, y, hueBase, count) {
+    if (reduce) return;
+    var n = count || (isMobile ? 45 : 60);
+    for (var i = 0; i < n; i++) {
+      var ang = R() * TAU, sp = 50 + R() * 200;
+      sparks.push({
+        x: x, y: y,
+        vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp,
+        life: 1, decay: 0.55 + R() * 0.6,
+        hue: (hueBase || 45) + (R() * 40 - 20),
+        size: 1.6 + R() * 1.5
+      });
+    }
+  }
+
+  function launchConfettiCannon() {
+    if (reduce) return;
+    var colors = ['#ff0055', '#ffaa00', '#00e5ff', '#b388ff', '#ffd700', '#ff6097', '#38ef7d'];
+    var count = isMobile ? 110 : 150;
+    for (var i = 0; i < count; i++) {
+      var side = R() > 0.5 ? 0 : 1;
+      var originX = side === 0 ? W * 0.08 : W * 0.92;
+      var angle = side === 0 ? (-Math.PI / 4 + (R() - 0.5) * 0.5) : (-3 * Math.PI / 4 + (R() - 0.5) * 0.5);
+      var velocity = 350 + R() * 320;
+      confetti.push({
+        x: originX, y: H * 0.85,
+        vx: Math.cos(angle) * velocity, vy: Math.sin(angle) * velocity,
+        color: colors[(R() * colors.length) | 0],
+        w: 8 + R() * 8, h: 4 + R() * 6,
+        rotation: R() * TAU, vr: (R() - 0.5) * 12,
+        life: 1, decay: 0.16 + R() * 0.2
+      });
+    }
+  }
+
+  var fxHasDrawn = false;
+
+  function drawEffects(dt, t) {
+    if (!balloonsActive && sparks.length === 0 && confetti.length === 0) {
+      if (fxHasDrawn) {
+        ctxFx.clearRect(0, 0, W, H);
+        fxHasDrawn = false;
+      }
+      return;
+    }
+
+    fxHasDrawn = true;
+    ctxFx.clearRect(0, 0, W, H);
+
+    // Sparks
+    if (sparks.length > 0) {
+      ctxFx.globalCompositeOperation = 'lighter';
+      for (var i = sparks.length - 1; i >= 0; i--) {
+        var sp = sparks[i];
+        sp.vy += 120 * dt; sp.x += sp.vx * dt; sp.y += sp.vy * dt;
+        sp.vx *= 0.99;
+        sp.life -= dt * sp.decay;
+        if (sp.life <= 0) { sparks.splice(i, 1); continue; }
+        ctxFx.fillStyle = 'hsla(' + sp.hue + ', 100%, 70%, ' + sp.life.toFixed(2) + ')';
+        ctxFx.beginPath();
+        ctxFx.arc(sp.x, sp.y, sp.size, 0, TAU);
+        ctxFx.fill();
+      }
+    }
+
+    ctxFx.globalCompositeOperation = 'source-over';
+
+    // Confetti
+    if (confetti.length > 0) {
+      for (var j = confetti.length - 1; j >= 0; j--) {
+        var c = confetti[j];
+        c.vy += 220 * dt; c.x += c.vx * dt; c.y += c.vy * dt;
+        c.vx *= 0.985;
+        c.rotation += c.vr * dt;
+        c.life -= dt * c.decay;
+        if (c.life <= 0 || c.y > H + 20) { confetti.splice(j, 1); continue; }
+
+        ctxFx.save();
+        ctxFx.translate(c.x, c.y);
+        ctxFx.rotate(c.rotation);
+        ctxFx.fillStyle = c.color;
+        ctxFx.globalAlpha = Math.min(1, c.life * 2);
+        ctxFx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h);
+        ctxFx.restore();
+      }
+      ctxFx.globalAlpha = 1;
+    }
+
+    // Floating Celebration Balloons (Zero shadowBlur, pure gradient performance)
+    if (balloonsActive) {
+      for (var bl = 0; bl < balloons.length; bl++) {
+        var b = balloons[bl];
+        b.y -= b.v * dt;
+        if (b.y < -80) b.y = H + 60 + R() * 80;
+        var bx = b.x + Math.sin(t * 0.0015 + b.phase) * b.sway;
+
+        ctxFx.save();
+        ctxFx.translate(bx, b.y);
+
+        // String
+        ctxFx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctxFx.lineWidth = 1.2;
+        ctxFx.beginPath();
+        ctxFx.moveTo(0, b.rh * 0.9);
+        var strSway = Math.sin(t * 0.003 + b.phase) * 7;
+        ctxFx.quadraticCurveTo(strSway, b.rh * 1.7, 0, b.rh * 2.5);
+        ctxFx.stroke();
+
+        // Balloon Body
+        var bGrad = ctxFx.createRadialGradient(-b.rw * 0.3, -b.rh * 0.3, b.rw * 0.1, 0, 0, b.rh);
+        bGrad.addColorStop(0, '#ffffff');
+        bGrad.addColorStop(0.3, b.palette.fill);
+        bGrad.addColorStop(1, 'rgba(18, 18, 24, 0.9)');
+
+        ctxFx.fillStyle = bGrad;
+        ctxFx.beginPath();
+        ctxFx.ellipse(0, 0, b.rw, b.rh, 0, 0, TAU);
+        ctxFx.fill();
+
+        // Balloon Knot
+        ctxFx.fillStyle = b.palette.fill;
+        ctxFx.beginPath();
+        ctxFx.moveTo(-3, b.rh);
+        ctxFx.lineTo(3, b.rh);
+        ctxFx.lineTo(0, b.rh + 5);
+        ctxFx.closePath();
+        ctxFx.fill();
+
+        ctxFx.restore();
+      }
+    }
+  }
+
+  // Spring Physics for Runaway Button
+  var rxCur = 0, ryCur = 0;
+  var rxTgt = 0, ryTgt = 0;
+  var rxVel = 0, ryVel = 0;
+  var springK = 0.16;
+  var springDamp = 0.74;
+
+  function updateRunawaySpring() {
+    var fx = (rxTgt - rxCur) * springK;
+    rxVel = (rxVel + fx) * springDamp;
+    rxCur += rxVel;
+
+    var fy = (ryTgt - ryCur) * springK;
+    ryVel = (ryVel + fy) * springDamp;
+    ryCur += ryVel;
+
+    runawayBtn.style.transform = 'translate(' + rxCur.toFixed(1) + 'px, ' + ryCur.toFixed(1) + 'px)';
+  }
+
+  var lastTime = performance.now();
+  function loop(now) {
+    var dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+    drawSpace(now, dt);
+    drawEffects(dt, now);
+    updateRunawaySpring();
+    requestAnimationFrame(loop);
+  }
+  if (!reduce) requestAnimationFrame(loop);
+
+  window.addEventListener('pointermove', function(e) {
+    if (R() > 0.55 || reduce || e.pointerType === 'touch') return;
+    sparks.push({
+      x: e.clientX, y: e.clientY,
+      vx: (R() - 0.5) * 30, vy: (R() - 0.5) * 30 - 10,
+      life: 0.5, decay: 1.4,
+      hue: 280 + R() * 60, size: 1.4 + R() * 1.1
+    });
+  });
+
+  /* ========================================================
+     NAVIGATION & SCENE LOGIC
+     ======================================================== */
+  var scene0 = document.getElementById('scene0');
+  var scene1 = document.getElementById('scene1');
+  var scene2 = document.getElementById('scene2');
+  var scene3 = document.getElementById('scene3');
+  var scene4 = document.getElementById('scene4');
+
+  setTimeout(function() {
+    scene0.classList.remove('entering');
+    scene0.classList.add('entered');
+  }, 1400);
+
+  var btnLaunch = document.getElementById('btnLaunch');
+  btnLaunch.addEventListener('click', function() {
+    initAudio();
+    startSnugbeats();
+    performCinematicFlight(scene0, scene1);
+  });
+
+  var btnToShorts = document.getElementById('btnToShorts');
+  btnToShorts.addEventListener('click', function() {
+    initAudio();
+    playBoing();
+    performCinematicFlight(scene1, scene2);
+  });
+
+  // Scene 2 Runaway Button
+  var runawayBtn = document.getElementById('runawayBtn');
+  var runawayArena = document.getElementById('runawayArena');
+  var runawayRoast = document.getElementById('runawayRoast');
+  var escapes = 0;
+  var escapeQuotes = [
+    '5 & 6 cannot separate! 💀',
+    'Wait, just 5 more minutes! 😂',
+    'Ahuhh... one more short! 📱',
+    'Who are we kidding? 💀',
+    'ALRIGHT YOU WIN! Tap me now! 🎉'
+  ];
+
+  function dodgeRunaway(e) {
+    if (escapes >= 4) return;
+    escapes++;
+    initAudio();
+    playBoing();
+    haptic(35);
+
+    var arenaRect = runawayArena.getBoundingClientRect();
+    var btnWidth = runawayBtn.offsetWidth || 220;
+    var btnHeight = runawayBtn.offsetHeight || 48;
+
+    var maxX = (arenaRect.width - btnWidth) / 2 - 14;
+    var maxY = (arenaRect.height - btnHeight) / 2 - 14;
+
+    rxTgt = (R() * 2 - 1) * Math.max(maxX, 140);
+    ryTgt = (R() * 2 - 1) * Math.max(maxY, 80);
+    rxVel += (R() - 0.5) * 50;
+    ryVel += (R() - 0.5) * 50;
+
+    runawayBtn.textContent = escapeQuotes[Math.min(escapes - 1, escapeQuotes.length - 1)];
+
+    if (escapes >= 4) {
+      runawayBtn.style.background = 'linear-gradient(135deg, #00e676, #00b0ff)';
+      runawayBtn.classList.add('catchable');
+      runawayRoast.textContent = '🏆 Truce accepted! Tap the button!';
+    } else {
+      runawayRoast.textContent = 'Attempt ' + escapes + '/4 — 5 & 6 forever! 😂';
+    }
+  }
+
+  runawayBtn.addEventListener('pointerenter', function(e) {
+    if (e.pointerType !== 'touch') dodgeRunaway(e);
+  });
+  runawayBtn.addEventListener('pointerdown', function(e) {
+    if (escapes < 4) {
+      e.preventDefault();
+      dodgeRunaway(e);
+    } else {
+      initAudio();
+      playSuccessFanfare();
+      launchConfettiCannon();
+      haptic([50, 70, 90]);
+      runawayRoast.textContent = '✨ Detox accepted! Traveling to next stop...';
+      setTimeout(function() {
+        performCinematicFlight(scene2, scene3);
+      }, 700);
+    }
+  });
+
+  var btnToCandle = document.getElementById('btnToCandle');
+  btnToCandle.addEventListener('click', function() {
+    initAudio();
+    performCinematicFlight(scene3, scene4);
+  });
+
+  /* ========================================================
+     SCENE 4: THE CANDLE & THOUGHTFUL FRIEND FINALE
+     ======================================================== */
+  var candleBtn = document.getElementById('candleBtn');
+  var candleHint = document.getElementById('candleHint');
+  var candleStage = document.getElementById('candleStage');
+  var finaleBar = document.getElementById('finaleBar');
+
+  var noteElements = [
+    document.getElementById('noteTitle'),
+    document.getElementById('line1'),
+    document.getElementById('line2'),
+    document.getElementById('line3'),
+    document.getElementById('noteSign')
+  ];
+
+  var candleBlown = false;
+
+  function blowCandle() {
+    if (candleBlown) return;
+    candleBlown = true;
+    initAudio();
+    playBlowSound();
+    haptic([60, 40, 80]);
+
+    document.body.classList.add('out');
+    candleStage.classList.add('shrunk');
+
+    setTimeout(function() { lanternsActive = true; }, 700);
+    setTimeout(function() { stardustActive = true; }, 2200);
+    setTimeout(function() { balloonsActive = true; }, 3400);
+
+    for (var b = 0; b < 5; b++) {
+      (function(idx) {
+        setTimeout(function() {
+          addBurst(W * (0.2 + R() * 0.6), H * (0.15 + R() * 0.35), hues[idx % hues.length], 65);
+          playChime(360 + idx * 75, 0, 0.8);
+        }, 500 + idx * 420);
+      })(b);
+    }
+
+    noteElements.forEach(function(el, idx) {
+      setTimeout(function() {
+        el.classList.add('reveal-in');
+        playChime(420 + idx * 60, 0, 1.1);
+      }, (reduce ? 0 : 1200) + idx * (reduce ? 0 : 1300));
+    });
+
+    setTimeout(function() {
+      playSuccessFanfare();
+      launchConfettiCannon();
+      finaleBar.classList.add('show');
+    }, (reduce ? 500 : 7600));
+  }
+
+  candleBtn.addEventListener('click', blowCandle);
+  if (candleHint) candleHint.addEventListener('click', blowCandle);
+
+  document.addEventListener('pointerdown', function(e) {
+    if (!candleBlown || e.target.closest('#candleBtn') || e.target.closest('#audioPill') || e.target.closest('#replayBtn')) return;
+    initAudio();
+    addBurst(e.clientX, e.clientY, hues[(R() * hues.length) | 0], 40);
+  });
+
+  var replayBtn = document.getElementById('replayBtn');
+  replayBtn.addEventListener('click', function() {
+    window.location.reload();
+  });
+
+})();
+</script>
+</body>
+</html>
