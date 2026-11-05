@@ -577,7 +577,7 @@ html, body {
 .flight-overlay.t2 .tb2 { animation: bubblePop 4.8s ease-out 3.2s forwards, bubbleBob 3.0s ease-in-out 3.2s infinite; }
 .flight-overlay.t2 .tb3 { animation: bubblePop 4.4s ease-out 5.0s forwards, bubbleBob 3.0s ease-in-out 5.0s infinite; }
 
-/* Transitions 3 & 4: Radar Scan */
+/* Transitions 3, 4 & 5: Radar Scan */
 .radar-cluster {
   display: none;
   flex-direction: column;
@@ -613,7 +613,8 @@ html, body {
   border: 1px solid rgba(56, 239, 125, 0.2);
 }
 .flight-overlay.t3 .radar-cluster,
-.flight-overlay.t4 .radar-cluster { display: flex; }
+.flight-overlay.t4 .radar-cluster,
+.flight-overlay.t5 .radar-cluster { display: flex; }
 
 /* ========================================================
    SCENE 1: SNUGBEATS VS WiCE
@@ -781,7 +782,150 @@ html, body {
 }
 
 /* ========================================================
-   SCENE 3: ADWOA THE TRAVELER & PHOTO
+   SCENE 3: 19 YEARS ON PLANET EARTH (COSMIC TELEMETRY)
+   ======================================================== */
+.telemetry-box {
+  width: 100%;
+  max-width: min(92vw, 42rem);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 24px;
+  padding: 16px 18px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.odometer-wrap {
+  background: rgba(16, 16, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.odometer-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: var(--soft);
+  text-transform: uppercase;
+}
+
+.odometer-digits {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.odometer-num {
+  font-family: monospace;
+  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 16px rgba(245, 200, 92, 0.4);
+}
+
+.odometer-sec {
+  font-size: 0.85rem;
+  color: var(--soft);
+  font-weight: 600;
+}
+
+.odometer-live-dot {
+  font-size: 0.68rem;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.odometer-live-dot span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  animation: stopPulse 1.4s ease-in-out infinite;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.stat-card.highlight {
+  border-color: rgba(245, 200, 92, 0.25);
+  background: rgba(245, 200, 92, 0.04);
+}
+
+.stat-icon {
+  font-size: 1.45rem;
+  line-height: 1;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-val {
+  font-size: clamp(0.88rem, 2.6vw, 0.98rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.stat-sub {
+  font-size: 0.72rem;
+  font-family: monospace;
+  color: var(--gold);
+}
+
+.stat-desc {
+  font-size: clamp(0.72rem, 2.1vw, 0.78rem);
+  color: #c0bccb;
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .stat-icon {
+    font-size: 1.2rem;
+  }
+}
+
+/* ========================================================
+   SCENE 4: ADWOA THE TRAVELER & PHOTO
    ======================================================== */
 .traveler-box {
   width: 100%;
@@ -844,7 +988,7 @@ html, body {
 }
 
 /* ========================================================
-   SCENE 4: THE CANDLE & THOUGHTFUL FRIEND FINALE
+   SCENE 5: THE CANDLE & THOUGHTFUL FRIEND FINALE
    ======================================================== */
 .candle-wrapper {
   position: relative;
@@ -1257,6 +1401,9 @@ html, body {
 </head>
 <body>
 
+<!-- Soothing Background Music: Real Uploaded Audio Track -->
+<audio id="bgAudio" src="audio.mp3" loop preload="auto" playsinline></audio>
+
 <!-- Dynamic Multi-Layered Space Canvas: Drifting Starfield, Planets & Comets -->
 <canvas id="canvas-space" aria-hidden="true"></canvas>
 
@@ -1264,13 +1411,13 @@ html, body {
 <canvas id="canvas-fx" aria-hidden="true"></canvas>
 
 <!-- Top Right Audio Pill -->
-<div class="audio-pill" id="audioPill" title="Toggle snugbeats">
+<div class="audio-pill" id="audioPill" title="Toggle music">
   <div class="wave-bars">
     <div class="wave-bar"></div>
     <div class="wave-bar"></div>
     <div class="wave-bar"></div>
   </div>
-  <span id="audioStatusText">♫ snugbeats</span>
+  <span id="audioStatusText">♫ adwoa’s melody</span>
 </div>
 
 <!-- Cinematic Time-Dilation Spaceflight Overlay (9.6s Slow Journey) -->
@@ -1305,20 +1452,21 @@ html, body {
     </div>
   </div>
 
-  <!-- Transition 3 & 4: Radar / Coordinates Scan -->
+  <!-- Transition 3, 4 & 5: Radar / Telemetry / Coordinates Scan -->
   <div class="radar-cluster" id="radarCluster">
-    <div class="radar-ring-icon" id="radarIcon">🛰️</div>
-    <div class="radar-coords" id="radarCoords">[ LAT 6.8000° N, LON 1.0833° W — AGOGO, GHANA ]</div>
+    <div class="radar-ring-icon" id="radarIcon">🌍</div>
+    <div class="radar-coords" id="radarCoords">[ CALCULATING 19 YEARS OF EARTH TELEMETRY ]</div>
   </div>
 
   <div class="flight-foot">
     <div class="journey-track">
       <div class="jt-line"><div class="jt-fill" id="jtFill"></div></div>
       <div class="jt-stop reached" style="left: 0%;"><b></b><span>Start</span></div>
-      <div class="jt-stop" id="stop1" style="left: 25%;"><b></b><span>Snugbeats</span></div>
-      <div class="jt-stop" id="stop2" style="left: 50%;"><b></b><span>5 & 6</span></div>
-      <div class="jt-stop" id="stop3" style="left: 75%;"><b></b><span>Agogo</span></div>
-      <div class="jt-stop" id="stop4" style="left: 100%;"><b></b><span>The Wish</span></div>
+      <div class="jt-stop" id="stop1" style="left: 20%;"><b></b><span>Snugbeats</span></div>
+      <div class="jt-stop" id="stop2" style="left: 40%;"><b></b><span>5 & 6</span></div>
+      <div class="jt-stop" id="stop3" style="left: 60%;"><b></b><span>19 Years</span></div>
+      <div class="jt-stop" id="stop4" style="left: 80%;"><b></b><span>Agogo</span></div>
+      <div class="jt-stop" id="stop5" style="left: 100%;"><b></b><span>The Wish</span></div>
       <div class="jt-rocket" id="jtRocket" style="left: 0%;">🚀</div>
     </div>
     <div class="flight-status" id="flightStatus">WARPING TO NEXT COORDINATE...</div>
@@ -1418,10 +1566,77 @@ html, body {
     </section>
 
     <!-- ==========================================
-         SCENE 3: ADWOA THE TRAVELER & PHOTO
+         SCENE 3: 19 YEARS ON PLANET EARTH (COSMIC TELEMETRY)
          ========================================== -->
     <section class="scene" id="scene3">
-      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--gold);">Chapter 3 • Adwoa The Traveler</div>
+      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--gold);">Chapter 3 • Cosmic Telemetry</div>
+      <h1 class="serif-head" data-split data-m style="--i:1; --anim:dropIn;">19 Years on Planet Earth 🌍</h1>
+      <p class="clean-sub" data-m style="--i:2; --anim:riseIn; margin-bottom:12px;">
+        19 full solar orbits completed today! Here is your official Earth telemetry: 🛸
+      </p>
+
+      <div class="telemetry-box tilt-card" data-m style="--i:3; --anim:swoopIn;">
+        <div class="odometer-wrap">
+          <div class="odometer-label">TOTAL TIME LOGGED ON PLANET EARTH</div>
+          <div class="odometer-digits">
+            <span class="odometer-num" id="odometerNum">599,616,000</span>
+            <span class="odometer-sec">seconds</span>
+          </div>
+          <div class="odometer-live-dot"><span></span> Live telemetry active (+1s)</div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🚿</div>
+            <div class="stat-body">
+              <div class="stat-val">~96 Full Days</div>
+              <div class="stat-sub">~8.3M seconds (~2,300 hrs)</div>
+              <div class="stat-desc">Bathing & having legendary shower thoughts in warm water 😂</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">😴</div>
+            <div class="stat-body">
+              <div class="stat-val">~6.3 Years</div>
+              <div class="stat-sub">~200M seconds (~55,500 hrs)</div>
+              <div class="stat-desc">Sleeping & bargaining for "just 5 more minutes of shorts" 🛌</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🫀</div>
+            <div class="stat-body">
+              <div class="stat-val">~750 Million</div>
+              <div class="stat-sub">Heartbeats</div>
+              <div class="stat-desc">A strong cosmic engine powering all that warmth, laughs & energy ✨</div>
+            </div>
+          </div>
+
+          <div class="stat-card highlight">
+            <div class="stat-icon">✨</div>
+            <div class="stat-body">
+              <div class="stat-val">100% Thoughtful</div>
+              <div class="stat-sub">Rare friend tier</div>
+              <div class="stat-desc">Actually remembers how someone’s week went and genuinely checks in 💛</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-in" data-m style="--i:4; --anim:riseIn;">
+        <button class="btn-cosmic" id="btnToAgogo">
+          <span>Continue to Agogo</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 4: ADWOA THE TRAVELER & PHOTO
+         ========================================== -->
+    <section class="scene" id="scene4">
+      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--gold);">Chapter 4 • Adwoa The Traveler</div>
       <h1 class="serif-head" data-split data-m style="--i:1; --anim:dropIn;">Adwoa The Traveler 🌍</h1>
 
       <div class="traveler-box tilt-card" data-m style="--i:2; --anim:swoopIn;">
@@ -1448,9 +1663,9 @@ html, body {
     </section>
 
     <!-- ==========================================
-         SCENE 4: THE CANDLE & THOUGHTFUL FRIEND FINALE
+         SCENE 5: THE CANDLE & THOUGHTFUL FRIEND FINALE
          ========================================== -->
-    <section class="scene" id="scene4">
+    <section class="scene" id="scene5">
       <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:#ffb852;">The Finale • Birthday Wishes 🎂</div>
 
       <div class="candle-wrapper" id="candleStage" data-m style="--i:1; --anim:popIn;">
@@ -1563,12 +1778,14 @@ html, body {
   initMagneticButtons();
 
   /* ========================================================
-     SWEET SNUGBEATS LO-FI ENGINE & BEAT-REACTIVE PULSES
+     SOOTHING SOUNDTRACK ENGINE (REAL AUDIO MP3)
      ======================================================== */
+  var bgAudio = document.getElementById('bgAudio');
+  var audioPill = document.getElementById('audioPill');
+  var audioStatusText = document.getElementById('audioStatusText');
+  var isAudioPlaying = false;
   var audioCtx = null;
-  var isPlayingSnugbeats = false;
-  var songTimer = null;
-  var masterGain = null;
+  var audioFadeTimer = null;
 
   function initAudio() {
     if (!audioCtx) {
@@ -1590,165 +1807,52 @@ html, body {
     }
   }
 
-  function playRhodesNote(freq, startTime, duration, velocity) {
-    if (!audioCtx || !isPlayingSnugbeats) return;
-    var osc1 = audioCtx.createOscillator();
-    var osc2 = audioCtx.createOscillator();
-    var gain = audioCtx.createGain();
-    var filter = audioCtx.createBiquadFilter();
-
-    osc1.type = 'sine';
-    osc1.frequency.setValueAtTime(freq, startTime);
-
-    osc2.type = 'triangle';
-    osc2.frequency.setValueAtTime(freq * 1.002, startTime);
-
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(850, startTime);
-    filter.frequency.exponentialRampToValueAtTime(320, startTime + duration);
-
-    var vel = velocity || 0.055;
-    gain.gain.setValueAtTime(0.0001, startTime);
-    gain.gain.linearRampToValueAtTime(vel, startTime + 0.04);
-    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-
-    osc1.connect(filter);
-    osc2.connect(filter);
-    filter.connect(gain);
-    gain.connect(masterGain || audioCtx.destination);
-
-    osc1.start(startTime);
-    osc2.start(startTime);
-    osc1.stop(startTime + duration + 0.05);
-    osc2.stop(startTime + duration + 0.05);
-  }
-
-  function playMusicBoxBell(freq, startTime) {
-    if (!audioCtx || !isPlayingSnugbeats) return;
-    var osc = audioCtx.createOscillator();
-    var gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, startTime);
-
-    gain.gain.setValueAtTime(0.0001, startTime);
-    gain.gain.linearRampToValueAtTime(0.035, startTime + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.2);
-
-    osc.connect(gain);
-    gain.connect(masterGain || audioCtx.destination);
-    osc.start(startTime);
-    osc.stop(startTime + 1.3);
-  }
-
-  function playLoFiKick(startTime) {
-    if (!audioCtx || !isPlayingSnugbeats) return;
-    var osc = audioCtx.createOscillator();
-    var gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(95, startTime);
-    osc.frequency.exponentialRampToValueAtTime(38, startTime + 0.16);
-
-    gain.gain.setValueAtTime(0.09, startTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.25);
-
-    osc.connect(gain);
-    gain.connect(masterGain || audioCtx.destination);
-    osc.start(startTime);
-    osc.stop(startTime + 0.26);
-
-    setTimeout(triggerBeatPulse, Math.max(0, (startTime - audioCtx.currentTime) * 1000));
-  }
-
-  function playLoFiSnap(startTime) {
-    if (!audioCtx || !isPlayingSnugbeats) return;
-    var bufSize = audioCtx.sampleRate * 0.08;
-    var buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-    var d = buf.getChannelData(0);
-    for (var i = 0; i < bufSize; i++) d[i] = (R() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.015));
-
-    var src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    var flt = audioCtx.createBiquadFilter();
-    flt.type = 'bandpass';
-    flt.frequency.setValueAtTime(1400, startTime);
-    flt.Q.setValueAtTime(1.2, startTime);
-
-    var gn = audioCtx.createGain();
-    gn.gain.setValueAtTime(0.03, startTime);
-    gn.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.08);
-
-    src.connect(flt);
-    flt.connect(gn);
-    gn.connect(masterGain || audioCtx.destination);
-    src.start(startTime);
-  }
-
-  var songChords = [
-    { root: 87.31, notes: [174.61, 220.00, 261.63, 329.63] },
-    { root: 82.41, notes: [164.81, 196.00, 246.94, 293.66] },
-    { root: 73.42, notes: [146.83, 220.00, 261.63, 329.63] },
-    { root: 65.41, notes: [130.81, 196.00, 246.94, 329.63] }
-  ];
-  var bellMelodies = [
-    [523.25, 659.25, 783.99],
-    [587.33, 493.88],
-    [440.00, 523.25, 659.25],
-    [392.00, 493.88, 523.25]
-  ];
-  var barIndex = 0;
-
-  function scheduleLoFiMeasure() {
-    if (!isPlayingSnugbeats || !audioCtx) return;
-    var now = audioCtx.currentTime;
-    var bar = songChords[barIndex % songChords.length];
-    var bells = bellMelodies[barIndex % bellMelodies.length];
-    var measureDuration = 3.3;
-
-    playRhodesNote(bar.root, now, measureDuration * 0.9, 0.05);
-    bar.notes.forEach(function(freq) {
-      playRhodesNote(freq, now, measureDuration * 0.85, 0.04);
-    });
-
-    playLoFiKick(now);
-    playLoFiKick(now + 1.65);
-    playLoFiSnap(now + 0.825);
-    playLoFiSnap(now + 2.475);
-
-    if (bells[0]) playMusicBoxBell(bells[0], now + 0.85);
-    if (bells[1]) playMusicBoxBell(bells[1], now + 1.8);
-    if (bells[2]) playMusicBoxBell(bells[2], now + 2.6);
-
-    barIndex++;
-    songTimer = setTimeout(scheduleLoFiMeasure, 3300);
-  }
-
-  function startSnugbeats() {
+  function playBgMusic() {
     initAudio();
-    if (!audioCtx) return;
-    if (!masterGain) {
-      masterGain = audioCtx.createGain();
-      masterGain.gain.setValueAtTime(0.7, audioCtx.currentTime);
-      masterGain.connect(audioCtx.destination);
+    if (!bgAudio) return;
+    clearInterval(audioFadeTimer);
+    bgAudio.volume = 0;
+    var playPromise = bgAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(function() {
+        isAudioPlaying = true;
+        audioPill.classList.add('playing');
+        audioStatusText.textContent = '♫ adwoa’s melody';
+        var vol = 0;
+        audioFadeTimer = setInterval(function() {
+          vol = Math.min(0.75, vol + 0.05);
+          bgAudio.volume = vol;
+          if (vol >= 0.75) clearInterval(audioFadeTimer);
+        }, 60);
+      }).catch(function(err) {
+        console.log('Audio autoplay prevented:', err);
+      });
     }
-    isPlayingSnugbeats = true;
-    audioPill.classList.add('playing');
-    audioStatusText.textContent = '♫ snugbeats (playing)';
-    scheduleLoFiMeasure();
   }
 
-  function stopSnugbeats() {
-    isPlayingSnugbeats = false;
-    clearTimeout(songTimer);
-    audioPill.classList.remove('playing');
-    audioStatusText.textContent = '♫ snugbeats (paused)';
+  function pauseBgMusic() {
+    if (!bgAudio) return;
+    clearInterval(audioFadeTimer);
+    var vol = bgAudio.volume;
+    audioFadeTimer = setInterval(function() {
+      vol = Math.max(0, vol - 0.08);
+      bgAudio.volume = vol;
+      if (vol <= 0) {
+        clearInterval(audioFadeTimer);
+        bgAudio.pause();
+        isAudioPlaying = false;
+        audioPill.classList.remove('playing');
+        audioStatusText.textContent = '♫ paused';
+      }
+    }, 50);
   }
 
-  var audioPill = document.getElementById('audioPill');
-  var audioStatusText = document.getElementById('audioStatusText');
   audioPill.addEventListener('click', function() {
-    initAudio();
-    if (isPlayingSnugbeats) stopSnugbeats();
-    else startSnugbeats();
+    if (isAudioPlaying) {
+      pauseBgMusic();
+    } else {
+      playBgMusic();
+    }
   });
 
   // Sound FX
@@ -2058,6 +2162,11 @@ html, body {
       flightContext.textContent = 'I wonder what is going through her mind right now? 😏';
       flightStatus.textContent = 'TUNING INTO HER THOUGHT WAVES...';
     } else if (transitionIndex === 3) {
+      flightContext.textContent = 'Calculating 19 full solar orbits on Planet Earth... 🌍';
+      radarIcon.textContent = '🌍';
+      radarCoords.textContent = '[ ORBIT 19.0 COMPLETE • 599,616,000 SECONDS LOGGED ]';
+      flightStatus.textContent = 'COMPILING 19 YEARS OF EARTH DATA • 600M SECONDS...';
+    } else if (transitionIndex === 4) {
       flightContext.textContent = 'Locating: Agogo’s favorite traveler...';
       radarIcon.textContent = '🛰️';
       radarCoords.textContent = '[ LAT 6.8000° N, LON 1.0833° W — AGOGO, GHANA ]';
@@ -2074,8 +2183,8 @@ html, body {
       fromEl.classList.remove('active', 'leaving', 'entered');
     }, 600);
 
-    var startPct = (transitionIndex - 1) * 25;
-    var endPct = transitionIndex * 25;
+    var startPct = (transitionIndex - 1) * 20;
+    var endPct = transitionIndex * 20;
 
     var startTime = performance.now();
     function animateFlight(now) {
@@ -2497,6 +2606,17 @@ html, body {
   var scene2 = document.getElementById('scene2');
   var scene3 = document.getElementById('scene3');
   var scene4 = document.getElementById('scene4');
+  var scene5 = document.getElementById('scene5');
+
+  // Live Ticking Cosmic Odometer for Chapter 3
+  var earthSeconds = 599616000;
+  var odometerEl = document.getElementById('odometerNum');
+  setInterval(function() {
+    earthSeconds++;
+    if (odometerEl) {
+      odometerEl.textContent = earthSeconds.toLocaleString();
+    }
+  }, 1000);
 
   setTimeout(function() {
     scene0.classList.remove('entering');
@@ -2506,7 +2626,7 @@ html, body {
   var btnLaunch = document.getElementById('btnLaunch');
   btnLaunch.addEventListener('click', function() {
     initAudio();
-    startSnugbeats();
+    playBgMusic();
     performCinematicFlight(scene0, scene1);
   });
 
@@ -2579,14 +2699,24 @@ html, body {
     }
   });
 
+  var btnToAgogo = document.getElementById('btnToAgogo');
+  if (btnToAgogo) {
+    btnToAgogo.addEventListener('click', function() {
+      initAudio();
+      performCinematicFlight(scene3, scene4);
+    });
+  }
+
   var btnToCandle = document.getElementById('btnToCandle');
-  btnToCandle.addEventListener('click', function() {
-    initAudio();
-    performCinematicFlight(scene3, scene4);
-  });
+  if (btnToCandle) {
+    btnToCandle.addEventListener('click', function() {
+      initAudio();
+      performCinematicFlight(scene4, scene5);
+    });
+  }
 
   /* ========================================================
-     SCENE 4: THE CANDLE & THOUGHTFUL FRIEND FINALE
+     SCENE 5: THE CANDLE & THOUGHTFUL FRIEND FINALE
      ======================================================== */
   var candleBtn = document.getElementById('candleBtn');
   var candleHint = document.getElementById('candleHint');
