@@ -484,8 +484,8 @@ html, body {
 .jt-stop span {
   position: absolute;
   top: 18px;
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
+  font-size: clamp(0.54rem, 1.8vw, 0.65rem);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--soft);
   white-space: nowrap;
@@ -495,13 +495,22 @@ html, body {
   position: absolute;
   top: 13px;
   left: 0;
-  font-size: 1.45rem;
-  line-height: 1;
-  transform: translate3d(0, 0, 0) translate(-50%, -50%) rotate(45deg);
-  filter: drop-shadow(0 0 8px rgba(255, 150, 60, 0.85));
+  width: 100%;
+  height: 0;
+  transform: translate3d(0%, 0, 0);
   z-index: 2;
   will-change: transform;
   pointer-events: none;
+}
+.jt-rocket i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-style: normal;
+  font-size: 1.45rem;
+  line-height: 1;
+  transform: translate(-50%, -50%) rotate(45deg);
+  filter: drop-shadow(0 0 8px rgba(255, 150, 60, 0.85));
 }
 
 /* Transition 1: Words Zooming Past */
@@ -535,7 +544,7 @@ html, body {
 .flight-overlay.t1 .w3 { animation: whisperGlide 4.2s cubic-bezier(0.16, 1, 0.3, 1) 4.2s forwards; }
 .flight-overlay.t1 .w4 { animation: whisperGlide 4.0s cubic-bezier(0.16, 1, 0.3, 1) 5.6s forwards; }
 
-/* Transition 2: Thought Bubbles */
+/* Transition 3 (After YouTube Shorts): Thought Bubbles */
 .thought-cluster {
   position: absolute;
   inset: 0;
@@ -550,15 +559,16 @@ html, body {
   opacity: 0;
   filter: drop-shadow(0 0 20px rgba(245, 200, 92, 0.45));
 }
-.flight-overlay.t2 .thought-cluster { display: block; }
-.flight-overlay.t2 .think-face {
+.flight-overlay.t3 .thought-cluster { display: block; }
+.flight-overlay.t3 .think-face {
   animation: faceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards, faceTilt 2.4s ease-in-out 1.0s infinite;
 }
 .thought-bubble {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  max-width: min(78vw, 21rem);
+  width: max-content;
+  max-width: min(84vw, 21rem);
   transform: translate(-50%, -50%) scale(0);
   background: rgba(22, 22, 30, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -570,9 +580,18 @@ html, body {
   opacity: 0;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
 }
-.tb1 { --x: 28%; --y: 34%; }
-.tb2 { --x: 72%; --y: 48%; }
-.tb3 { --x: 34%; --y: 68%; }
+.tb1 { --x: 32%; --y: 33%; }
+.tb2 { --x: 68%; --y: 49%; }
+.tb3 { --x: 36%; --y: 68%; }
+@media (max-width: 600px) {
+  .tb1 { --x: 50%; --y: 31%; }
+  .tb2 { --x: 50%; --y: 50%; }
+  .tb3 { --x: 50%; --y: 68%; }
+  .w1 { --x: 42%; --y: 43%; }
+  .w2 { --x: 58%; --y: 54%; }
+  .w3 { --x: 44%; --y: 66%; }
+  .w4 { --x: 56%; --y: 36%; }
+}
 .thought-bubble .tl-a, .thought-bubble .tl-b {
   position: absolute;
   border-radius: 50%;
@@ -582,11 +601,11 @@ html, body {
 .thought-bubble .tl-a { width: 11px; height: 11px; left: 24px; bottom: -15px; }
 .thought-bubble .tl-b { width: 6px; height: 6px; left: 15px; bottom: -24px; }
 
-.flight-overlay.t2 .tb1 { animation: bubblePop 4.8s ease-out 1.2s forwards, bubbleBob 3.0s ease-in-out 1.2s infinite; }
-.flight-overlay.t2 .tb2 { animation: bubblePop 4.8s ease-out 3.2s forwards, bubbleBob 3.0s ease-in-out 3.2s infinite; }
-.flight-overlay.t2 .tb3 { animation: bubblePop 4.4s ease-out 5.0s forwards, bubbleBob 3.0s ease-in-out 5.0s infinite; }
+.flight-overlay.t3 .tb1 { animation: bubblePop 4.8s ease-out 1.2s forwards, bubbleBob 3.0s ease-in-out 1.2s infinite; }
+.flight-overlay.t3 .tb2 { animation: bubblePop 4.8s ease-out 3.2s forwards, bubbleBob 3.0s ease-in-out 3.2s infinite; }
+.flight-overlay.t3 .tb3 { animation: bubblePop 4.4s ease-out 5.0s forwards, bubbleBob 3.0s ease-in-out 5.0s infinite; }
 
-/* Transitions 3, 4 & 5: Radar Scan */
+/* Transitions 2, 4 & 5: Radar Scan */
 .radar-cluster {
   display: none;
   flex-direction: column;
@@ -613,15 +632,16 @@ html, body {
 .radar-ring-icon::after { animation-delay: 1.2s; }
 .radar-coords {
   font-family: monospace;
-  font-size: 0.9rem;
+  font-size: clamp(0.76rem, 2.5vw, 0.9rem);
+  text-align: center;
   color: var(--cyan);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   background: rgba(56, 239, 125, 0.08);
   padding: 6px 14px;
   border-radius: 12px;
   border: 1px solid rgba(56, 239, 125, 0.2);
 }
-.flight-overlay.t3 .radar-cluster,
+.flight-overlay.t2 .radar-cluster,
 .flight-overlay.t4 .radar-cluster,
 .flight-overlay.t5 .radar-cluster { display: flex; }
 
@@ -1477,7 +1497,7 @@ html, body {
       <div class="jt-stop" id="stop3" style="left: 60%;"><b></b><span>19 Years</span></div>
       <div class="jt-stop" id="stop4" style="left: 80%;"><b></b><span>Agogo</span></div>
       <div class="jt-stop" id="stop5" style="left: 100%;"><b></b><span>The Wish</span></div>
-      <div class="jt-rocket" id="jtRocket">🚀</div>
+      <div class="jt-rocket" id="jtRocket"><i>🚀</i></div>
     </div>
     <div class="flight-status" id="flightStatus">WARPING TO NEXT COORDINATE...</div>
   </div>
@@ -2025,7 +2045,7 @@ html, body {
     });
   }
   resize();
-  window.addEventListener('resize', function() { resize(); trackWidth = 0; if (typeof updateTrackerDisplay === 'function') updateTrackerDisplay(curRocketPct); });
+  window.addEventListener('resize', function() { resize(); if (typeof updateTrackerDisplay === 'function') updateTrackerDisplay(curRocketPct); });
 
   window.addEventListener('pointermove', function(e) {
     if (e.pointerType === 'touch') return;
@@ -2234,22 +2254,24 @@ html, body {
   var curRocketPct = 0;
   var transitionIndex = 0;
 
-  var trackWidth = 0;
-  function measureTrack() {
-    trackWidth = journeyTrackEl ? journeyTrackEl.offsetWidth : 0;
-  }
   function updateTrackerDisplay(pct) {
     curRocketPct = pct;
-    if (!trackWidth) measureTrack();
-    var tw = trackWidth || (W * 0.85);
-    var fraction = pct / 100;
-    var rocketX = fraction * tw;
-    jtFill.style.transform = 'scaleX(' + fraction + ')';
-    jtRocket.style.transform = 'translate3d(' + rocketX.toFixed(2) + 'px, 0, 0) translate(-50%, -50%) rotate(45deg)';
+    var fraction = Math.max(0, Math.min(1, pct / 100));
+    jtFill.style.transform = 'scaleX(' + fraction.toFixed(4) + ')';
+    jtRocket.style.transform = 'translate3d(' + (fraction * 100).toFixed(3) + '%, 0, 0)';
   }
   updateTrackerDisplay(0);
 
+  var sceneStepMap = {
+    scene1: 1,
+    scene2: 2,
+    scene3: 3,
+    scene4: 4,
+    scene5: 5
+  };
+
   function performCinematicFlight(fromEl, toEl) {
+    if (isWarping) return;
     if (reduce) {
       fromEl.classList.remove('active', 'entered');
       toEl.classList.add('active', 'entered');
@@ -2257,17 +2279,21 @@ html, body {
     }
 
     var flightDuration = 9600;
-    measureTrack();
     isWarping = true;
     playCosmicHum(flightDuration / 1000);
     haptic([30, 50, 30]);
 
-    // Camera shake on warp engagement
-    // Smooth silent warp glide (no jarring DOM shake)
-
-    transitionIndex++;
+    var step = (toEl && sceneStepMap[toEl.id]) ? sceneStepMap[toEl.id] : (transitionIndex + 1);
+    transitionIndex = step;
     triggerPassingPlanet(transitionIndex);
 
+    for (var s = 1; s <= 5; s++) {
+      var stEl = document.getElementById('stop' + s);
+      if (!stEl) continue;
+      stEl.classList.remove('target');
+      if (s < transitionIndex) stEl.classList.add('reached');
+      else stEl.classList.remove('reached');
+    }
     var targetStopEl = document.getElementById('stop' + transitionIndex);
     if (targetStopEl) targetStopEl.classList.add('target');
 
@@ -2277,13 +2303,13 @@ html, body {
       flightContext.textContent = 'Her default replies whenever she understands or agrees with what you’re saying paa 😂:';
       flightStatus.textContent = 'SLOWING TIME DOWN • FLOATING TO CHAPTER 1...';
     } else if (transitionIndex === 2) {
-      flightContext.textContent = 'I wonder what is going through her mind right now? 😏';
-      flightStatus.textContent = 'TUNING INTO HER THOUGHT WAVES...';
+      flightContext.textContent = 'Tracking her late-night YouTube Shorts activity... 📱👀';
+      radarIcon.textContent = '📱';
+      radarCoords.textContent = '[ 01:30 AM • YOUTUBE SHORTS FEED ACTIVE ]';
+      flightStatus.textContent = 'LOCKING ONTO CHAPTER 2: 5 & 6...';
     } else if (transitionIndex === 3) {
-      flightContext.textContent = '19 years on Earth... let’s look at some fun facts! 🌍';
-      radarIcon.textContent = '🌍';
-      radarCoords.textContent = '[ 19 YEARS • 599,616,000 SECONDS ON EARTH ]';
-      flightStatus.textContent = 'LOADING 19-YEAR FUN FACTS...';
+      flightContext.textContent = 'I wonder what is going through her mind right now? 😏';
+      flightStatus.textContent = 'TUNING INTO HER THOUGHT WAVES • NEXT: 19 YEARS...';
     } else if (transitionIndex === 4) {
       flightContext.textContent = 'Locating: Agogo’s favorite traveler...';
       radarIcon.textContent = '🛰️';
@@ -2810,6 +2836,7 @@ html, body {
   var runawayArena = document.getElementById('runawayArena');
   var runawayRoast = document.getElementById('runawayRoast');
   var escapes = 0;
+  var runawaySolved = false;
   var escapeQuotes = [
     '5 & 6 cannot separate! 💀',
     'Wait, just 5 more minutes! 😂',
@@ -2819,7 +2846,7 @@ html, body {
   ];
 
   function dodgeRunaway(e) {
-    if (escapes >= 4) return;
+    if (escapes >= 4 || runawaySolved) return;
     escapes++;
     initAudio();
     playBoing();
@@ -2829,17 +2856,19 @@ html, body {
     var btnWidth = runawayBtn.offsetWidth || 220;
     var btnHeight = runawayBtn.offsetHeight || 48;
 
-    var maxX = (arenaRect.width - btnWidth) / 2 - 14;
-    var maxY = (arenaRect.height - btnHeight) / 2 - 14;
+    var maxX = Math.max(24, Math.min((arenaRect.width - btnWidth) / 2 - 10, 140));
+    var maxY = Math.max(20, Math.min((arenaRect.height - btnHeight) / 2 - 10, 75));
 
-    rxTgt = (R() * 2 - 1) * Math.max(maxX, 140);
-    ryTgt = (R() * 2 - 1) * Math.max(maxY, 80);
-    rxVel += (R() - 0.5) * 50;
-    ryVel += (R() - 0.5) * 50;
+    rxTgt = (R() * 2 - 1) * maxX;
+    ryTgt = (R() * 2 - 1) * maxY;
+    rxVel += (R() - 0.5) * 40;
+    ryVel += (R() - 0.5) * 40;
 
     runawayBtn.textContent = escapeQuotes[Math.min(escapes - 1, escapeQuotes.length - 1)];
 
     if (escapes >= 4) {
+      rxTgt = 0;
+      ryTgt = 0;
       runawayBtn.style.background = 'linear-gradient(135deg, #00e676, #00b0ff)';
       runawayBtn.classList.add('catchable');
       runawayRoast.textContent = '🏆 Truce accepted! Tap the button!';
@@ -2852,10 +2881,12 @@ html, body {
     if (e.pointerType !== 'touch') dodgeRunaway(e);
   });
   runawayBtn.addEventListener('pointerdown', function(e) {
+    if (runawaySolved || isWarping) return;
     if (escapes < 4) {
       e.preventDefault();
       dodgeRunaway(e);
     } else {
+      runawaySolved = true;
       initAudio();
       playSuccessFanfare();
       launchConfettiCannon();
@@ -2863,7 +2894,7 @@ html, body {
       runawayRoast.textContent = '✨ Detox accepted! Traveling to next stop...';
       setTimeout(function() {
         performCinematicFlight(scene2, scene3);
-      }, 700);
+      }, 650);
     }
   });
 
