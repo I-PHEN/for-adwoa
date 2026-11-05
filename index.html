@@ -515,10 +515,10 @@ html, body {
   will-change: transform, opacity;
   pointer-events: none;
 }
-.w1 { --x: 30%; --y: 45%; text-shadow: 0 0 30px rgba(255, 101, 153, 0.9); }
-.w2 { --x: 70%; --y: 54%; text-shadow: 0 0 30px rgba(245, 200, 92, 0.9); }
-.w3 { --x: 35%; --y: 67%; text-shadow: 0 0 30px rgba(56, 239, 125, 0.85); }
-.w4 { --x: 65%; --y: 38%; text-shadow: 0 0 30px rgba(175, 120, 255, 0.9); }
+.w1 { --x: 30%; --y: 45%; text-shadow: 0 0 14px rgba(255, 101, 153, 0.7); }
+.w2 { --x: 70%; --y: 54%; text-shadow: 0 0 14px rgba(245, 200, 92, 0.7); }
+.w3 { --x: 35%; --y: 67%; text-shadow: 0 0 14px rgba(56, 239, 125, 0.7); }
+.w4 { --x: 65%; --y: 38%; text-shadow: 0 0 14px rgba(175, 120, 255, 0.7); }
 
 .flight-overlay.t1 .whisper-cluster { display: block; }
 .flight-overlay.t1 .w1 { animation: whisperGlide 4.2s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards; }
@@ -1210,22 +1210,20 @@ html, body {
    KEYFRAMES
    ======================================================== */
 @keyframes riseIn {
-  from { opacity: 0; transform: translateY(35px) scale(0.96); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translate3d(0, 20px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 @keyframes dropIn {
-  0% { opacity: 0; transform: translateY(-40px) scale(0.85); }
-  65% { opacity: 1; transform: translateY(4px) scale(1.02); }
-  100% { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translate3d(0, -18px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 @keyframes popIn {
-  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
-  60% { opacity: 1; transform: scale(1.08) translateY(-2px); }
-  100% { opacity: 1; transform: none; }
+  from { opacity: 0; transform: scale(0.88); }
+  to { opacity: 1; transform: scale(1); }
 }
 @keyframes swoopIn {
-  0% { opacity: 0; transform: translateZ(-500px) translateY(100px); }
-  100% { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translate3d(0, 22px, 0) scale(0.98); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 @keyframes chIn {
   0% { opacity: 0; transform: translateY(40px) rotateX(-60deg) scale(0.6); }
@@ -1245,8 +1243,8 @@ html, body {
   50% { transform: translateY(-5px); }
 }
 @keyframes flyPast {
-  0% { opacity: 1; transform: none; }
-  100% { opacity: 0; transform: translateY(calc((var(--i, 0) - 1.5) * 60px)) translateZ(450px) scale(1.4); }
+  0% { opacity: 1; transform: translate3d(0, 0, 0); }
+  100% { opacity: 0; transform: translate3d(0, -16px, 0) scale(0.97); }
 }
 @keyframes whisperGlide {
   0% {
@@ -1569,10 +1567,10 @@ html, body {
          SCENE 3: 19 YEARS ON PLANET EARTH (COSMIC TELEMETRY)
          ========================================== -->
     <section class="scene" id="scene3">
-      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--gold);">Chapter 3 • Cosmic Telemetry</div>
-      <h1 class="serif-head" data-split data-m style="--i:1; --anim:dropIn;">19 Years on Planet Earth 🌍</h1>
+      <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--gold);">Chapter 3 • 19 Years on Earth 🌍</div>
+      <h1 class="serif-head" data-m style="--i:1; --anim:dropIn;">19 Years on Planet Earth</h1>
       <p class="clean-sub" data-m style="--i:2; --anim:riseIn; margin-bottom:12px;">
-        19 full solar orbits completed today! Here is your official Earth telemetry: 🛸
+        You’re turning 19 tomorrow! Based on human averages, here are some fun facts about your time on Earth so far: 🛸
       </p>
 
       <div class="telemetry-box tilt-card" data-m style="--i:3; --anim:swoopIn;">
@@ -1582,43 +1580,43 @@ html, body {
             <span class="odometer-num" id="odometerNum">599,616,000</span>
             <span class="odometer-sec">seconds</span>
           </div>
-          <div class="odometer-live-dot"><span></span> Live telemetry active (+1s)</div>
+          <div class="odometer-live-dot"><span></span> Live Earth ticker (+1s)</div>
         </div>
 
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-icon">🚿</div>
             <div class="stat-body">
-              <div class="stat-val">~96 Full Days</div>
+              <div class="stat-val">~96 Full Days Bathing</div>
               <div class="stat-sub">~8.3M seconds (~2,300 hrs)</div>
-              <div class="stat-desc">Bathing & having legendary shower thoughts in warm water 😂</div>
+              <div class="stat-desc">Spent singing under warm water & winning imaginary shower arguments 😂</div>
             </div>
           </div>
 
           <div class="stat-card">
             <div class="stat-icon">😴</div>
             <div class="stat-body">
-              <div class="stat-val">~6.3 Years</div>
+              <div class="stat-val">~6.3 Years Sleeping</div>
               <div class="stat-sub">~200M seconds (~55,500 hrs)</div>
-              <div class="stat-desc">Sleeping & bargaining for "just 5 more minutes of shorts" 🛌</div>
+              <div class="stat-desc">Deep slumber, sweet dreams & bargaining for "just 5 more minutes" 🛌</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🍽️</div>
+            <div class="stat-body">
+              <div class="stat-val">~1.5 Years Spent Eating</div>
+              <div class="stat-sub">~20,800 meals & snacks</div>
+              <div class="stat-desc">Over 13,000 hours dedicated purely to delicious food & midnight snacks 🍕😋</div>
             </div>
           </div>
 
           <div class="stat-card">
             <div class="stat-icon">🫀</div>
             <div class="stat-body">
-              <div class="stat-val">~750 Million</div>
-              <div class="stat-sub">Heartbeats</div>
-              <div class="stat-desc">A strong cosmic engine powering all that warmth, laughs & energy ✨</div>
-            </div>
-          </div>
-
-          <div class="stat-card highlight">
-            <div class="stat-icon">✨</div>
-            <div class="stat-body">
-              <div class="stat-val">100% Thoughtful</div>
-              <div class="stat-sub">Rare friend tier</div>
-              <div class="stat-desc">Actually remembers how someone’s week went and genuinely checks in 💛</div>
+              <div class="stat-val">~750 Million Heartbeats</div>
+              <div class="stat-sub">Non-stop since day 1</div>
+              <div class="stat-desc">Her heart beating over 750,000,000 times without taking a single second off! 💪✨</div>
             </div>
           </div>
         </div>
@@ -2144,8 +2142,7 @@ html, body {
     haptic([30, 50, 30]);
 
     // Camera shake on warp engagement
-    appEl.classList.add('shake');
-    setTimeout(function() { appEl.classList.remove('shake'); }, 600);
+    // Smooth silent warp glide (no jarring DOM shake)
 
     transitionIndex++;
     triggerPassingPlanet(transitionIndex);
@@ -2362,13 +2359,13 @@ html, body {
         var alpha = Math.min(1, (1 - star.z / 1000) * 1.25);
 
         if (isWarping && warpFactor > 1.25) {
-          var streakMult = (warpFactor - 1.0) * 7;
+          var streakMult = (warpFactor - 1.0) * 5;
           var prevK = 280 / (star.z + speed * (10 + streakMult));
           var prevPx = star.x * prevK + cx;
           var prevPy = star.y * prevK + cy;
 
           ctxSpace.strokeStyle = star.hue === 330 ? 'rgba(255, 120, 180, ' + alpha.toFixed(2) + ')' : 'rgba(235, 230, 255, ' + alpha.toFixed(2) + ')';
-          ctxSpace.lineWidth = Math.max(1.0, size * 0.9);
+          ctxSpace.lineWidth = Math.max(1.0, size * 0.85);
           ctxSpace.beginPath();
           ctxSpace.moveTo(prevPx, prevPy);
           ctxSpace.lineTo(starPx, starPy);
