@@ -441,11 +441,16 @@ html, body {
   overflow: hidden;
 }
 .jt-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
   height: 100%;
-  width: 0%;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(0);
   background: linear-gradient(90deg, var(--pink), var(--gold));
   box-shadow: 0 0 10px var(--pink-glow);
-  will-change: width;
+  will-change: transform;
 }
 .jt-stop {
   position: absolute;
@@ -486,13 +491,14 @@ html, body {
 .jt-rocket {
   position: absolute;
   top: 13px;
-  left: 0%;
+  left: 0;
   font-size: 1.45rem;
   line-height: 1;
-  transform: translate(-50%, -50%) rotate(45deg);
+  transform: translate3d(0, 0, 0) translate(-50%, -50%) rotate(45deg);
   filter: drop-shadow(0 0 8px rgba(255, 150, 60, 0.85));
   z-index: 2;
-  will-change: left;
+  will-change: transform;
+  pointer-events: none;
 }
 
 /* Transition 1: Words Zooming Past */
@@ -1465,7 +1471,7 @@ html, body {
       <div class="jt-stop" id="stop3" style="left: 60%;"><b></b><span>19 Years</span></div>
       <div class="jt-stop" id="stop4" style="left: 80%;"><b></b><span>Agogo</span></div>
       <div class="jt-stop" id="stop5" style="left: 100%;"><b></b><span>The Wish</span></div>
-      <div class="jt-rocket" id="jtRocket" style="left: 0%;">🚀</div>
+      <div class="jt-rocket" id="jtRocket">🚀</div>
     </div>
     <div class="flight-status" id="flightStatus">WARPING TO NEXT COORDINATE...</div>
   </div>
@@ -1570,7 +1576,7 @@ html, body {
       <div class="tag-pill" data-m style="--i:0; --anim:dropIn; color:var(--gold);">Chapter 3 • 19 Years on Earth 🌍</div>
       <h1 class="serif-head" data-m style="--i:1; --anim:dropIn;">19 Years on Planet Earth</h1>
       <p class="clean-sub" data-m style="--i:2; --anim:riseIn; margin-bottom:12px;">
-        You’re turning 19 tomorrow! Based on human averages, here are some fun facts about your time on Earth so far: 🛸
+        You turned 19 today! Based on human averages, here are some fun facts about your time on Earth so far: 🛸
       </p>
 
       <div class="telemetry-box tilt-card" data-m style="--i:3; --anim:swoopIn;">
@@ -1987,7 +1993,7 @@ html, body {
     });
   }
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', function() { resize(); updateTrackerDisplay(curRocketPct); });
 
   window.addEventListener('pointermove', function(e) {
     if (e.pointerType === 'touch') return;
@@ -2126,8 +2132,20 @@ html, body {
   var jtFill = document.getElementById('jtFill');
   var jtRocket = document.getElementById('jtRocket');
   var appEl = document.getElementById('app');
+  var journeyTrackEl = document.querySelector('.journey-track');
 
+  var curRocketPct = 0;
   var transitionIndex = 0;
+
+  function updateTrackerDisplay(pct) {
+    curRocketPct = pct;
+    var tw = journeyTrackEl ? journeyTrackEl.offsetWidth : (W * 0.85);
+    var fraction = pct / 100;
+    var rocketX = fraction * tw;
+    jtFill.style.transform = 'scaleX(' + fraction + ')';
+    jtRocket.style.transform = 'translate3d(' + rocketX.toFixed(2) + 'px, 0, 0) translate(-50%, -50%) rotate(45deg)';
+  }
+  updateTrackerDisplay(0);
 
   function performCinematicFlight(fromEl, toEl) {
     if (reduce) {
@@ -2187,11 +2205,10 @@ html, body {
     function animateFlight(now) {
       var progress = Math.min(1, (now - startTime) / flightDuration);
 
-      // Silky smooth cubic easing for tracker rocket
-      var easeP = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      // Harmonic sine-smooth easing for completely steady, fluid rocket glide
+      var easeP = 0.5 - 0.5 * Math.cos(progress * Math.PI);
       var curPct = startPct + (endPct - startPct) * easeP;
-      jtFill.style.width = curPct.toFixed(2) + '%';
-      jtRocket.style.left = curPct.toFixed(2) + '%';
+      updateTrackerDisplay(curPct);
 
       if (activePlanet) {
         activePlanet.progress = progress;
@@ -2201,6 +2218,7 @@ html, body {
       warpFactor = 1.0 + Math.sin(progress * Math.PI) * 1.8;
 
       if (progress >= 1) {
+        updateTrackerDisplay(endPct);
         warpFactor = 1.0;
         isWarping = false;
         activePlanet = null;
