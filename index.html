@@ -80,7 +80,7 @@ html, body {
   padding: 6px 14px;
   border-radius: 24px;
   cursor: pointer;
-  transition: all 0.22s ease;
+  transition: transform 0.22s ease, border-color 0.22s ease, color 0.22s ease;
   color: var(--soft);
   font-size: 0.8rem;
   font-weight: 600;
@@ -99,10 +99,12 @@ html, body {
 }
 .wave-bar {
   width: 3px;
-  height: 3px;
+  height: 11px;
   background: var(--pink);
   border-radius: 2px;
-  transition: height 0.2s ease;
+  transform: scaleY(0.27);
+  transform-origin: 50% 100%;
+  transition: transform 0.2s ease;
 }
 .audio-pill.playing .wave-bar:nth-child(1) { animation: wavePulse 1.1s infinite ease-in-out; }
 .audio-pill.playing .wave-bar:nth-child(2) { animation: wavePulse 0.85s infinite ease-in-out 0.15s; }
@@ -131,7 +133,6 @@ html, body {
   align-items: center;
   justify-content: center;
   position: relative;
-  perspective: 1200px;
 }
 
 /* ========================================================
@@ -143,7 +144,6 @@ html, body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  perspective: 1200px;
 }
 
 .scene.active {
@@ -354,13 +354,16 @@ html, body {
   text-align: center;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.7s ease;
+  visibility: hidden;
+  transition: opacity 0.7s ease, visibility 0s linear 0.7s;
   background: radial-gradient(circle at center, rgba(18, 18, 24, 0.65) 0%, rgba(12, 12, 16, 0.92) 85%);
   padding: 24px;
 }
 
 .flight-overlay.active {
   opacity: 1;
+  visibility: visible;
+  transition: opacity 0.7s ease, visibility 0s linear 0s;
 }
 
 .flight-head {
@@ -467,7 +470,7 @@ html, body {
   border-radius: 50%;
   background: #181820;
   border: 2px solid rgba(255, 255, 255, 0.22);
-  transition: all 0.4s ease;
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 .jt-stop.reached b {
   background: var(--gold);
@@ -678,8 +681,10 @@ html, body {
 }
 .sound-bar-live {
   width: 4.5px;
+  height: 38px;
   background: linear-gradient(to top, var(--pink), var(--gold));
   border-radius: 3px;
+  transform-origin: 50% 100%;
   animation: eqBounce 1.2s infinite ease-in-out;
 }
 .sound-bar-live:nth-child(2) { animation-delay: 0.15s; }
@@ -1088,10 +1093,11 @@ html, body {
   left: 50%;
   bottom: 6.6rem;
   width: 4px;
-  height: 0;
+  height: 90px;
   opacity: 0;
   background: linear-gradient(to top, rgba(210, 210, 230, 0.75), transparent);
-  transform: translateX(-50%);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: 50% 100%;
   border-radius: 3px;
   pointer-events: none;
 }
@@ -1189,7 +1195,7 @@ html, body {
   justify-content: center;
   opacity: 0;
   transform: translateY(12px);
-  transition: all 0.5s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .finale-bar.show {
   opacity: 1;
@@ -1205,7 +1211,7 @@ html, body {
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 .replay-btn:hover {
   background: rgba(255, 255, 255, 0.16);
@@ -1232,8 +1238,8 @@ html, body {
   to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 @keyframes chIn {
-  0% { opacity: 0; transform: translateY(40px) rotateX(-60deg) scale(0.6); }
-  100% { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 @keyframes chFloat {
   0%, 100% { transform: translateY(0); }
@@ -1300,12 +1306,12 @@ html, body {
   to { transform: scale(3); opacity: 0; }
 }
 @keyframes stopPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 101, 153, 0.6); }
-  50% { box-shadow: 0 0 0 6px rgba(255, 101, 153, 0); }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
 }
 @keyframes shimmer {
-  0%, 55% { left: -60%; }
-  100% { left: 130%; }
+  0%, 55% { transform: translate3d(0, 0, 0) skewX(-20deg); }
+  100% { transform: translate3d(475%, 0, 0) skewX(-20deg); }
 }
 @keyframes orbitA {
   from { transform: rotate(-20deg) scaleY(0.36) rotate(0deg); }
@@ -1344,8 +1350,8 @@ html, body {
   75% { transform: scale(1.03, 0.98) rotate(1deg); }
 }
 @keyframes smokeRise {
-  0% { height: 0; opacity: 0.85; }
-  100% { height: 90px; opacity: 0; transform: translateX(-50%) translateY(-28px) scaleX(2); }
+  0% { opacity: 0.85; transform: translateX(-50%) scaleY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-28px) scale(2, 1); }
 }
 @keyframes lineFadeIn {
   from { opacity: 0; transform: translateY(14px); }
@@ -1368,12 +1374,12 @@ html, body {
   to { transform: rotate(360deg); }
 }
 @keyframes eqBounce {
-  0%, 100% { height: 8px; }
-  50% { height: 38px; }
+  0%, 100% { transform: scaleY(0.21); }
+  50% { transform: scaleY(1); }
 }
 @keyframes wavePulse {
-  0%, 100% { height: 3px; }
-  50% { height: 11px; }
+  0%, 100% { transform: scaleY(0.27); }
+  50% { transform: scaleY(1); }
 }
 @keyframes radarPulse {
   0%, 100% { transform: scale(1); opacity: 0.8; }
@@ -1650,7 +1656,7 @@ html, body {
 
         <div class="photo-and-tribute">
           <div class="adwoa-thumb">
-            <img src="adwoa.jpg" alt="Adwoa at Agogo Hospital" />
+            <img src="adwoa.jpg" alt="Adwoa at Agogo Hospital" decoding="async" />
           </div>
           <div class="tribute-text">
             <strong>Breast Cancer Awareness:</strong> Honestly, the way you took that awareness needs to be studied. Always sharing, so mindful of people. Really, really cool of you.
@@ -1738,11 +1744,12 @@ html, body {
   function initTiltCards() {
     var cards = document.querySelectorAll('.tilt-card');
     cards.forEach(function(card) {
-      card.addEventListener('pointermove', function(e) {
-        if (reduce || e.pointerType === 'touch') return;
-        var rect = card.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
+      var rect = null, px = 0, py = 0, queued = false;
+      function apply() {
+        queued = false;
+        if (!rect) return;
+        var x = px - rect.left;
+        var y = py - rect.top;
         var cx = rect.width / 2;
         var cy = rect.height / 2;
         var rotX = ((y - cy) / cy) * -7;
@@ -1750,8 +1757,19 @@ html, body {
         card.style.transform = 'perspective(900px) rotateX(' + rotX.toFixed(1) + 'deg) rotateY(' + rotY.toFixed(1) + 'deg) scale3d(1.01, 1.01, 1.01)';
         card.style.setProperty('--gx', ((x / rect.width) * 100).toFixed(0) + '%');
         card.style.setProperty('--gy', ((y / rect.height) * 100).toFixed(0) + '%');
+      }
+      card.addEventListener('pointerenter', function(e) {
+        if (reduce || e.pointerType === 'touch') return;
+        rect = card.getBoundingClientRect();
+      });
+      card.addEventListener('pointermove', function(e) {
+        if (reduce || e.pointerType === 'touch') return;
+        if (!rect) rect = card.getBoundingClientRect();
+        px = e.clientX; py = e.clientY;
+        if (!queued) { queued = true; requestAnimationFrame(apply); }
       });
       card.addEventListener('pointerleave', function() {
+        rect = null;
         card.style.transform = '';
         card.style.setProperty('--gx', '50%');
         card.style.setProperty('--gy', '0%');
@@ -1765,16 +1783,29 @@ html, body {
      ======================================================== */
   function initMagneticButtons() {
     document.querySelectorAll('.btn-cosmic').forEach(function(btn) {
-      btn.addEventListener('pointermove', function(e) {
+      var bx = 0, by = 0, px = 0, py = 0, has = false, queued = false;
+      function apply() {
+        queued = false;
+        if (!has) return;
+        var dx = (px - bx) * 0.24;
+        var dy = (py - by) * 0.24;
+        btn.style.transform = 'translate3d(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px, 0) scale(1.02)';
+      }
+      btn.addEventListener('pointerenter', function(e) {
         if (reduce || e.pointerType === 'touch') return;
+        btn.style.transform = '';
         var rect = btn.getBoundingClientRect();
-        var bx = rect.left + rect.width / 2;
-        var by = rect.top + rect.height / 2;
-        var dx = (e.clientX - bx) * 0.24;
-        var dy = (e.clientY - by) * 0.24;
-        btn.style.transform = 'translate(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px) scale(1.02)';
+        bx = rect.left + rect.width / 2;
+        by = rect.top + rect.height / 2;
+        has = true;
+      });
+      btn.addEventListener('pointermove', function(e) {
+        if (reduce || e.pointerType === 'touch' || !has) return;
+        px = e.clientX; py = e.clientY;
+        if (!queued) { queued = true; requestAnimationFrame(apply); }
       });
       btn.addEventListener('pointerleave', function() {
+        has = false;
         btn.style.transform = '';
       });
     });
@@ -1975,6 +2006,7 @@ html, body {
   // Cap DPR at 1.0 on mobile for locked 60fps, 1.5 on desktop
   var dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
 
+  var lowPower = false;
   var targetParallaxX = 0, targetParallaxY = 0;
   var curParallaxX = 0, curParallaxY = 0;
 
@@ -1993,7 +2025,7 @@ html, body {
     });
   }
   resize();
-  window.addEventListener('resize', function() { resize(); updateTrackerDisplay(curRocketPct); });
+  window.addEventListener('resize', function() { resize(); trackWidth = 0; if (typeof updateTrackerDisplay === 'function') updateTrackerDisplay(curRocketPct); });
 
   window.addEventListener('pointermove', function(e) {
     if (e.pointerType === 'touch') return;
@@ -2109,6 +2141,32 @@ html, body {
     { fill: 'rgba(56, 239, 125, 0.9)' },
     { fill: 'rgba(175, 120, 255, 0.9)' }
   ];
+  // Pre-render one sprite per balloon colour (drawn scaled each frame)
+  var BAL_RW = 24, BAL_RH = 31;
+  balloonPalette.forEach(function(pal) {
+    var sc = document.createElement('canvas');
+    sc.width = BAL_RW * 2 + 4;
+    sc.height = BAL_RH * 2 + 10;
+    var g = sc.getContext('2d');
+    g.translate(BAL_RW + 2, BAL_RH + 2);
+    var grad = g.createRadialGradient(-BAL_RW * 0.3, -BAL_RH * 0.3, BAL_RW * 0.1, 0, 0, BAL_RH);
+    grad.addColorStop(0, '#ffffff');
+    grad.addColorStop(0.3, pal.fill);
+    grad.addColorStop(1, 'rgba(18, 18, 24, 0.9)');
+    g.fillStyle = grad;
+    g.beginPath();
+    g.ellipse(0, 0, BAL_RW, BAL_RH, 0, 0, TAU);
+    g.fill();
+    g.fillStyle = pal.fill;
+    g.beginPath();
+    g.moveTo(-3, BAL_RH);
+    g.lineTo(3, BAL_RH);
+    g.lineTo(0, BAL_RH + 5);
+    g.closePath();
+    g.fill();
+    pal.sprite = sc;
+  });
+
   var numBalloons = isMobile ? 8 : 14;
   for (var bIdx = 0; bIdx < numBalloons; bIdx++) {
     balloons.push({
@@ -2137,9 +2195,14 @@ html, body {
   var curRocketPct = 0;
   var transitionIndex = 0;
 
+  var trackWidth = 0;
+  function measureTrack() {
+    trackWidth = journeyTrackEl ? journeyTrackEl.offsetWidth : 0;
+  }
   function updateTrackerDisplay(pct) {
     curRocketPct = pct;
-    var tw = journeyTrackEl ? journeyTrackEl.offsetWidth : (W * 0.85);
+    if (!trackWidth) measureTrack();
+    var tw = trackWidth || (W * 0.85);
     var fraction = pct / 100;
     var rocketX = fraction * tw;
     jtFill.style.transform = 'scaleX(' + fraction + ')';
@@ -2155,6 +2218,7 @@ html, body {
     }
 
     var flightDuration = 9600;
+    measureTrack();
     isWarping = true;
     playCosmicHum(flightDuration / 1000);
     haptic([30, 50, 30]);
@@ -2246,8 +2310,9 @@ html, body {
   function drawSpace(t, dt) {
     ctxSpace.clearRect(0, 0, W, H);
 
-    curParallaxX += (targetParallaxX - curParallaxX) * 0.05;
-    curParallaxY += (targetParallaxY - curParallaxY) * 0.05;
+    var pk = 1 - Math.pow(0.95, dt * 60);
+    curParallaxX += (targetParallaxX - curParallaxX) * pk;
+    curParallaxY += (targetParallaxY - curParallaxY) * pk;
 
     var cx = W / 2 + curParallaxX;
     var cy = H / 2 + curParallaxY;
@@ -2263,15 +2328,17 @@ html, body {
 
       var drawX = dm.x + curParallaxX * 0.4;
       var drawY = dm.y + curParallaxY * 0.4;
-      var a = dm.alpha * (0.8 + 0.2 * Math.sin(t * 0.002 + dm.phase));
-      ctxSpace.fillStyle = dm.color + a.toFixed(2) + ')';
+      if (!dm.solid) dm.solid = dm.color + '1)';
+      ctxSpace.globalAlpha = dm.alpha * (0.8 + 0.2 * Math.sin(t * 0.002 + dm.phase));
+      ctxSpace.fillStyle = dm.solid;
       ctxSpace.beginPath();
       ctxSpace.arc(drawX, drawY, dm.size, 0, TAU);
       ctxSpace.fill();
     }
+    ctxSpace.globalAlpha = 1;
 
     // 2. Comets / Shooting Stars
-    if (t - lastCometTime > 3400 + R() * 2600) {
+    if (!lowPower && t - lastCometTime > 3400 + R() * 2600) {
       spawnComet();
       lastCometTime = t;
     }
@@ -2382,20 +2449,23 @@ html, body {
           var prevPx = star.x * prevK + cx;
           var prevPy = star.y * prevK + cy;
 
-          ctxSpace.strokeStyle = star.hue === 330 ? 'rgba(255, 120, 180, ' + alpha.toFixed(2) + ')' : 'rgba(235, 230, 255, ' + alpha.toFixed(2) + ')';
+          ctxSpace.globalAlpha = alpha;
+          ctxSpace.strokeStyle = star.hue === 330 ? '#ff78b4' : '#ebe6ff';
           ctxSpace.lineWidth = Math.max(1.0, size * 0.85);
           ctxSpace.beginPath();
           ctxSpace.moveTo(prevPx, prevPy);
           ctxSpace.lineTo(starPx, starPy);
           ctxSpace.stroke();
         } else {
-          ctxSpace.fillStyle = 'rgba(240, 235, 255, ' + alpha.toFixed(2) + ')';
+          ctxSpace.globalAlpha = alpha;
+          ctxSpace.fillStyle = '#f0ebff';
           ctxSpace.beginPath();
           ctxSpace.arc(starPx, starPy, Math.max(0.75, size * 0.65), 0, TAU);
           ctxSpace.fill();
         }
       }
     }
+    ctxSpace.globalAlpha = 1;
 
     // 6. Finale Sky Lanterns (Pre-rendered sprite draw, zero GPU gradient overhead)
     if (lanternsActive) {
@@ -2448,7 +2518,7 @@ html, body {
   function launchConfettiCannon() {
     if (reduce) return;
     var colors = ['#ff0055', '#ffaa00', '#00e5ff', '#b388ff', '#ffd700', '#ff6097', '#38ef7d'];
-    var count = isMobile ? 110 : 150;
+    var count = lowPower ? 60 : (isMobile ? 100 : 150);
     for (var i = 0; i < count; i++) {
       var side = R() > 0.5 ? 0 : 1;
       var originX = side === 0 ? W * 0.08 : W * 0.92;
@@ -2507,14 +2577,13 @@ html, body {
         c.life -= dt * c.decay;
         if (c.life <= 0 || c.y > H + 20) { confetti.splice(j, 1); continue; }
 
-        ctxFx.save();
-        ctxFx.translate(c.x, c.y);
-        ctxFx.rotate(c.rotation);
+        var cs = Math.cos(c.rotation), sn = Math.sin(c.rotation);
+        ctxFx.setTransform(cs * dpr, sn * dpr, -sn * dpr, cs * dpr, c.x * dpr, c.y * dpr);
         ctxFx.fillStyle = c.color;
         ctxFx.globalAlpha = Math.min(1, c.life * 2);
         ctxFx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h);
-        ctxFx.restore();
       }
+      ctxFx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctxFx.globalAlpha = 1;
     }
 
@@ -2526,39 +2595,19 @@ html, body {
         if (b.y < -80) b.y = H + 60 + R() * 80;
         var bx = b.x + Math.sin(t * 0.0015 + b.phase) * b.sway;
 
-        ctxFx.save();
-        ctxFx.translate(bx, b.y);
-
         // String
         ctxFx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
         ctxFx.lineWidth = 1.2;
         ctxFx.beginPath();
-        ctxFx.moveTo(0, b.rh * 0.9);
+        ctxFx.moveTo(bx, b.y + b.rh * 0.9);
         var strSway = Math.sin(t * 0.003 + b.phase) * 7;
-        ctxFx.quadraticCurveTo(strSway, b.rh * 1.7, 0, b.rh * 2.5);
+        ctxFx.quadraticCurveTo(bx + strSway, b.y + b.rh * 1.7, bx, b.y + b.rh * 2.5);
         ctxFx.stroke();
 
-        // Balloon Body
-        var bGrad = ctxFx.createRadialGradient(-b.rw * 0.3, -b.rh * 0.3, b.rw * 0.1, 0, 0, b.rh);
-        bGrad.addColorStop(0, '#ffffff');
-        bGrad.addColorStop(0.3, b.palette.fill);
-        bGrad.addColorStop(1, 'rgba(18, 18, 24, 0.9)');
-
-        ctxFx.fillStyle = bGrad;
-        ctxFx.beginPath();
-        ctxFx.ellipse(0, 0, b.rw, b.rh, 0, 0, TAU);
-        ctxFx.fill();
-
-        // Balloon Knot
-        ctxFx.fillStyle = b.palette.fill;
-        ctxFx.beginPath();
-        ctxFx.moveTo(-3, b.rh);
-        ctxFx.lineTo(3, b.rh);
-        ctxFx.lineTo(0, b.rh + 5);
-        ctxFx.closePath();
-        ctxFx.fill();
-
-        ctxFx.restore();
+        // Balloon body + knot from pre-rendered sprite
+        var spr = b.palette.sprite;
+        var sx = b.rw / BAL_RW, sy = b.rh / BAL_RH;
+        ctxFx.drawImage(spr, bx - (BAL_RW + 2) * sx, b.y - (BAL_RH + 2) * sy, spr.width * sx, spr.height * sy);
       }
     }
   }
@@ -2570,7 +2619,8 @@ html, body {
   var springK = 0.13;
   var springDamp = 0.78;
 
-  function updateRunawaySpring() {
+  function updateRunawaySpring(dt) {
+    var s = Math.min(3, (dt || 1 / 60) * 60);
     if (Math.abs(rxTgt - rxCur) < 0.05 && Math.abs(rxVel) < 0.05 && Math.abs(ryTgt - ryCur) < 0.05 && Math.abs(ryVel) < 0.05) {
       if (rxCur !== rxTgt || ryCur !== ryTgt) {
         rxCur = rxTgt;
@@ -2581,26 +2631,59 @@ html, body {
       }
       return;
     }
-    var fx = (rxTgt - rxCur) * springK;
-    rxVel = (rxVel + fx) * springDamp;
-    rxCur += rxVel;
+    var dampS = Math.pow(springDamp, s);
+    var fx = (rxTgt - rxCur) * springK * s;
+    rxVel = (rxVel + fx) * dampS;
+    rxCur += rxVel * s;
 
-    var fy = (ryTgt - ryCur) * springK;
-    ryVel = (ryVel + fy) * springDamp;
-    ryCur += ryVel;
+    var fy = (ryTgt - ryCur) * springK * s;
+    ryVel = (ryVel + fy) * dampS;
+    ryCur += ryVel * s;
 
     runawayBtn.style.transform = 'translate3d(' + rxCur.toFixed(1) + 'px, ' + ryCur.toFixed(1) + 'px, 0)';
   }
 
   var lastTime = performance.now();
+  var smoothDt = 1 / 60;
+  var perfFrames = 0, perfSlow = 0;
+
+  // Adaptive quality: quietly lighten the scene on devices that can't hold the frame rate
+  function enterLowPower() {
+    if (lowPower) return;
+    lowPower = true;
+    stars3D.length = Math.max(40, Math.floor(stars3D.length * 0.6));
+    dustMotes.length = Math.floor(dustMotes.length * 0.5);
+    comets.length = 0;
+  }
+
   function loop(now) {
-    var dt = Math.min((now - lastTime) / 1000, 0.05);
+    var raw = Math.min((now - lastTime) / 1000, 0.1);
     lastTime = now;
+
+    // Low-pass filter evens out irregular phone frame timing (removes micro-jitter)
+    smoothDt += (raw - smoothDt) * 0.2;
+    var dt = Math.min(smoothDt, 0.05);
+
+    // Sample real performance (ignore the first second while things warm up)
+    if (!lowPower && now > 1500) {
+      perfFrames++;
+      if (raw > 0.024) perfSlow++;
+      if (perfFrames >= 120) {
+        if (perfSlow > 50) enterLowPower();
+        perfFrames = 0; perfSlow = 0;
+      }
+    }
+
     drawSpace(now, dt);
     drawEffects(dt, now);
-    updateRunawaySpring();
+    updateRunawaySpring(dt);
     requestAnimationFrame(loop);
   }
+
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) { lastTime = performance.now(); smoothDt = 1 / 60; perfFrames = 0; perfSlow = 0; }
+  });
+
   if (!reduce) requestAnimationFrame(loop);
 
   window.addEventListener('pointermove', function(e) {
@@ -2628,7 +2711,7 @@ html, body {
   var odometerEl = document.getElementById('odometerNum');
   setInterval(function() {
     earthSeconds++;
-    if (odometerEl) {
+    if (odometerEl && scene3.classList.contains('active')) {
       odometerEl.textContent = earthSeconds.toLocaleString();
     }
   }, 1000);
